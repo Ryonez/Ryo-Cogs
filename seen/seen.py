@@ -2,7 +2,7 @@ from discord.ext import commands
 from cogs.utils.dataIO import dataIO
 import discord
 import os
-#Commit patch note error tracking #20
+#Commit patch note error tracking #21
 
 class Seen:
     '''Check when someone was last seen.'''
