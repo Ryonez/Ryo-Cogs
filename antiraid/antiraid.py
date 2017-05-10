@@ -41,7 +41,7 @@ class Antiraid:
 
     @slowmode.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_messages=True)
-    async def add(self, ctx, *channels: discord.Channel)
+    async def add(self, ctx, channel: discord.Channel=[])
         """Adds channels to the servers slowmode list."""
         server=ctx.message.server
         schannels = [discord.utils.get(server.channels, id=sc) for sc in schannels]
