@@ -1,0 +1,7 @@
+{
+    "AUTHOR" : "Ryonez",
+    "NAME" : "antiraid",
+    "SHORT" : "antiraid tools.",
+    "DESCRIPTION" : "Check when the user was last active on a server.",
+    "TAGS": ["antiraid", "member", "tools"]
+}
