@@ -22,7 +22,7 @@ class Antiraid:
     @checks.serverowner_or_permissions(administrator=True)
     async def antiraid(self, ctx):
         """Antiraid settings"""
-        sel.bot.say("Antiraid cmd seen.")        
+        self.bot.say("Antiraid cmd seen.")
         if ctx.invoked_subcommand is None:
             server = ctx.message.server
             await send_cmd_help(ctx)
