@@ -18,7 +18,7 @@ class Antiraid:
         settings = dataIO.load_json("data/antiraid/settings.json")
         self.settings = defaultdict(lambda: default_settings.copy(), settings)
 
-    @commands.group(pass_context=True, no_pm=True)
+    @antiraid.group(pass_context=True, no_pm=True)
     @checks.serverowner_or_permissions(administrator=True)
     async def antiraid(self, ctx):
         """Antiraid settings"""
