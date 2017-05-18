@@ -1,8 +1,9 @@
 from discord.ext import commands
 from cogs.utils.dataIO import dataIO
-from collections import defaultdict
+from collections import deque, defaultdict
 from __main__ import send_cmd_help, settings
 from .utils import checks
+from datetime import datetime as dt, timedelta
 import discord
 import os
 
@@ -18,6 +19,7 @@ class Antiraid:
         self.bot = bot
         settings = dataIO.load_json("data/antiraid/settings.json")
         self.settings = defaultdict(lambda: default_settings.copy(), settings)
+        self.sm_cache = defaultdict(lambda: deque(maxlen=2))
 
     @commands.group(pass_context=True, no_pm=True)
     @checks.serverowner_or_permissions(administrator=True)
@@ -49,9 +51,9 @@ class Antiraid:
                 await self.bot.say("There are currently no channels in slowmode.")
 
 
-    @slowmode.command(name="add", pass_context=True, no_pm=True)
+    @slowmode.command(name="activate", pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_messages=True)
-    async def _slowmode_add(self, ctx, *channel: discord.Channel):
+    async def _slowmode_activate(self, ctx, *channel: discord.Channel):
         """Adds channels to the servers slowmode list."""
         server = ctx.message.server
         serverchannels = [x.id for x in server.channels]
@@ -62,8 +64,7 @@ class Antiraid:
 
         ctmp = {
         "worked" : [],
-        "listed" :[],
-        "listed_names" : [],
+        "present" : [],
         "noperm" : []
         }
 
@@ -74,7 +75,7 @@ class Antiraid:
 
         for channel in channels:
             if channel.id in schannels:
-                ctmp["listed_names"].append(channel.name)
+                ctmp["present"].append(channel.name)
             elif channel.permissions_for(server.me).manage_messages == True:
                 self.settings[server.id]["slowmode_channels"].append(channel.id)
                 ctmp["worked"].append(channel.name)
@@ -84,12 +85,85 @@ class Antiraid:
 
         if ctmp["worked"]:
             msg += "\n:white_check_mark: The following channel(s) are now in slowmode:\n\n```diff\n+ " + "\n+ ".join(ctmp["worked"]) + "```"
-        if ctmp["listed_names"]:
-            msg += "\n:eight_spoked_asterisk: The following channel(s) are already in slowmode:\n\n```diff\n+ " + "\n+ ".join(ctmp["listed_names"]) + "```"
+        if ctmp["present"]:
+            msg += "\n:eight_spoked_asterisk: The following channel(s) are already in slowmode:\n\n```diff\n+ " + "\n+ ".join(ctmp["present"]) + "```"
         if ctmp["noperm"]:
             msg += "\n:anger:I do not have the perms to add the following channel(s) you gave me! These are not in slowmode!:anger:\n\n```diff\n- " + "\n- ".join(ctmp["noperm"]) + "```"
 
         await self.bot.say(msg)
+
+    @slowmode.command(name="deactivate", pass_context=True, no_pm=True)
+    @checks.mod_or_permissions(manage_messages=True)
+    async def _slowmode_deactivate(self, ctx, *channel: discord.Channel):
+        """Removes channels from the servers slowmode list."""
+        server = ctx.message.server
+        serverchannels = [x.id for x in server.channels]
+        channels = [r for r in channel if str(r.id) in serverchannels]
+        schannels = self.settings[server.id].get("slowmode_channels", [])
+
+        ctmp = {
+        "worked" : [],
+        "cleanupf" : [],
+        "nodata" : []
+        }
+
+        msg = "\n**Slowmode notices:**\n"
+
+        #for schannels in serverchannels:
+        #    ctmp["listed"].append(schannels)
+
+        for channel in channels:
+            try:
+                self.settings[server.id]["slowmode_channels"].remove(channel.id)
+                ctmp["worked"].append(channel.name)
+            except ValueError:
+                ctmp["nodata"].append(channel.name)
+
+        #Check for and clean channals that no longer exist
+        for c in schannels:
+            if c not in serverchannels:
+                try:
+                    self.settings[server.id]["slowmode_channels"].remove(c)
+                except ValueError:
+                    ctmp["cleanupf"].append(c)
+
+        self.save()
+
+        if ctmp["worked"]:
+            msg += "\n:white_check_mark: The following channel(s) are no longer in slowmode:\n\n```diff\n+ " + "\n+ ".join(ctmp["worked"]) + "```"
+        if ctmp["nodata"]:
+            msg += "\n:eight_spoked_asterisk: The following channel(s) weren't in slowmode, no changes needed:\n\n```diff\n+ " + "\n+ ".join(ctmp["nodata"]) + "```"
+        if ctmp["cleanupf"]:
+            msg += "\n:exclamation: There was and issue cleaning while preforming a self cleanup! This won't affect the anti raid system, but please contact my owner with the follow data so he can take care of it, thank you!\n\n```diff\n- " + "\n- ".join(ctmp["cleanupf"]) + "```"
+
+        await self.bot.say(msg)
+
+    async def check_slowmode(self, message):
+        server = message.server
+        channel = message.channel
+        author = message.author
+        ts = message.timestamp
+        if server.id not in self.settings:
+            return False
+        if channel.id in self.settings[server.id]["slowmode_channels"]:
+            self.sm_cache[author].append(ts)
+            times = self.sm_cache[author]
+            if len(times) == 2 and (times[1] - times[0]) < timedelta(seconds = 5):
+                try:
+                    await self.bot.delete_message(message)
+                    return True
+                except:
+                    pass
+        return False
+
+    async def on_message(self, message):
+        if message.channel.is_private or self.bot.user == message.author \
+         or not isinstance(message.author, discord.Member):
+            return
+#        elif self.is_mod_or_superior(message):
+#            return
+        await self.check_slowmode(message)
+
 
     def save(self):
         dataIO.save_json("data/antiraid/settings.json", self.settings)
