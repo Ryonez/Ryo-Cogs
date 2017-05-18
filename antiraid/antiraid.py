@@ -32,7 +32,7 @@ class Antiraid:
 
     @antiraid.group(pass_context=True, no_pm=True)
     async def slowmode(self, ctx):
-        """Slowmode settings.\nChannels that have slowmode enabled will delete messages posted less than 5 seconds from the last. This inculdes messages deleted via slowmode. \nNote, any user who has the "manage_messages" for the channel set to true is exempt from being slowed."""
+        """Slowmode settings.\nChannels that have slowmode enabled will delete a users messages if they posted less than 5 seconds from their last one. This inculdes messages deleted via slowmode. \nNote, any user who has the "manage_messages" for the channel set to true is exempt from being slowed."""
         if ctx.invoked_subcommand is None or \
                 isinstance(ctx.invoked_subcommand, commands.Group):
             await send_cmd_help(ctx)
