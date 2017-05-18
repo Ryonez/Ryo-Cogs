@@ -6,6 +6,7 @@ from .utils import checks
 from datetime import datetime as dt, timedelta
 import discord
 import os
+import copy
 
 default_settings = {
     "anti-log" : None,
@@ -19,7 +20,7 @@ class Antiraid:
         self.bot = bot
         settings = dataIO.load_json("data/antiraid/settings.json")
         self.settings = defaultdict(lambda: default_settings.copy(), settings)
-        self.sm_cache = defaultdict(lambda: deque(maxlen=2))
+        self.sm_cache = {}
 
     @commands.group(pass_context=True, no_pm=True)
     @checks.serverowner_or_permissions(administrator=True)
@@ -31,7 +32,7 @@ class Antiraid:
 
     @antiraid.group(pass_context=True, no_pm=True)
     async def slowmode(self, ctx):
-        """Slowmode settings."""
+        """Slowmode settings. Note, any user who has the "manage_messages" for the channel set to true is exempt from being slowed."""
         if ctx.invoked_subcommand is None or \
                 isinstance(ctx.invoked_subcommand, commands.Group):
             await send_cmd_help(ctx)
@@ -45,15 +46,16 @@ class Antiraid:
             schannels = self.settings[server.id].get("slowmode_channels", [])
             schannels = [discord.utils.get(server.channels, id=sc) for sc in schannels]
             schannels = [sc.name for sc in schannels if sc is not None]
+
             if schannels:
-                await self.bot.say("The channels currently set on this server are:\n\n" + ",".join(schannels))
+                await self.bot.say("\n:eight_spoked_asterisk: The following channel(s) are in slowmode:\n\n```diff\n+ " + "\n+ ".join(schannels) + "```")
             else:
                 await self.bot.say("There are currently no channels in slowmode.")
 
 
-    @slowmode.command(name="activate", pass_context=True, no_pm=True)
+    @slowmode.command(name="enable", pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_messages=True)
-    async def _slowmode_activate(self, ctx, *channel: discord.Channel):
+    async def _slowmode_enable(self, ctx, *channel: discord.Channel):
         """Adds channels to the servers slowmode list."""
         server = ctx.message.server
         serverchannels = [x.id for x in server.channels]
@@ -92,9 +94,9 @@ class Antiraid:
 
         await self.bot.say(msg)
 
-    @slowmode.command(name="deactivate", pass_context=True, no_pm=True)
+    @slowmode.command(name="disable", pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_messages=True)
-    async def _slowmode_deactivate(self, ctx, *channel: discord.Channel):
+    async def _slowmode_disable(self, ctx, *channel: discord.Channel):
         """Removes channels from the servers slowmode list."""
         server = ctx.message.server
         serverchannels = [x.id for x in server.channels]
@@ -146,14 +148,48 @@ class Antiraid:
         if server.id not in self.settings:
             return False
         if channel.id in self.settings[server.id]["slowmode_channels"]:
-            self.sm_cache[author].append(ts)
-            times = self.sm_cache[author]
-            if len(times) == 2 and (times[1] - times[0]) < timedelta(seconds = 5):
+            if channel.id not in self.sm_cache:
+                self.sm_cache[channel.id] = {}
+                self.sm_cache[channel.id]["npermsc"] = 0
+            if channel.permissions_for(author).manage_messages == True:
+                return False
+            if channel.permissions_for(server.me).manage_messages == False:
+                if self.sm_cache[channel.id]["npermsc"] == 0:
+                    await self.bot.send_message(channel, "\n**Slowmode notices:**\n:anger: I no longer have the perms to keep this channel in slowmode! Please restore the manage_messages perm to me, or remove this channel from slowmode!:anger:")
+                    self.sm_cache[channel.id]["npermsc"] += 1
+                    return False
+                elif self.sm_cache[channel.id]["npermsc"] == 10:
+                    self.sm_cache[channel.id]["npermsc"] = 0
+                    return False
+                else:
+                    self.sm_cache[channel.id]["npermsc"] += 1
+                    return False
+            if author.id not in self.sm_cache[channel.id]:
+                self.sm_cache[channel.id][author.id] = {}
+                data = {}
+                data["LastMsgTime"] = ts
+                data["Counter"] = 0
+                self.sm_cache[channel.id][author.id] = data
+                return False
+
+            data = self.sm_cache[channel.id][author.id]
+            LastMsgTime = data["LastMsgTime"]
+            if (ts - data["LastMsgTime"]) < timedelta(seconds = 5):
                 try:
                     await self.bot.delete_message(message)
+                    data["Counter"] += 1
+                    if data["Counter"] == 3:
+                        msg = "\n:no_entry:**Slowmode notices**:no_entry: \n ```diff\n Hold your horses!\n- This channel is in slowmode! Please wait 5 seconds between sending messages.\n Thank you!```\n{}".format(author.mention)
+                        await self.bot.send_message(channel, msg)
+                    data["LastMsgTime"] = ts
+                    self.sm_cache[channel.id][author.id] = data
                     return True
                 except:
                     pass
+            else:
+                data["LastMsgTime"] = ts
+                data["Counter"] = 0
+                self.sm_cache[channel.id][author.id] = data
         return False
 
     async def on_message(self, message):
