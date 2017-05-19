@@ -1,0 +1,7 @@
+{
+    "AUTHOR" : "Ryonez",
+    "NAME" : "antiraid",
+    "SHORT" : "antiraid tools.",
+    "DESCRIPTION" : "Collection of tools to fight against raids.",
+    "TAGS": ["antiraid", "member", "tools", "slowmode"]
+}
