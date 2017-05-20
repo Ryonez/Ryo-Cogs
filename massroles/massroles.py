@@ -93,4 +93,4 @@ class MassRoles:
 
 
 def setup(bot: commands.Bot):
-    bot.add_cog(MassDM(bot))
+    bot.add_cog(MassRoles(bot))
