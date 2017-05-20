@@ -29,6 +29,8 @@ class MassRoles:
                    *roles: discord.Role):
         """Start the massrole add by providing the role you want **ADDED**, then the role of the users you want it added to.
         """
+        if ctx.invoked_subcommand is None:
+            await send_cmd_help(ctx)
 
         server = ctx.message.server
         sender = ctx.message.author
@@ -64,6 +66,8 @@ class MassRoles:
                    roles: discord.Role):
         """Removes the traget role from any users who have it.
         """
+        if ctx.invoked_subcommand is None:
+            await send_cmd_help(ctx)
 
         server = ctx.message.server
         sender = ctx.message.author
