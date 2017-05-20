@@ -32,6 +32,7 @@ class MassRoles:
 
         server = ctx.message.server
         sender = ctx.message.author
+        channel = ctx.message.channel
 
         if not channel.permissions_for(server.me).manage_roles:
             await self.bot.say('I don\'t have manage_roles.')
@@ -66,6 +67,7 @@ class MassRoles:
 
         server = ctx.message.server
         sender = ctx.message.author
+        channel = ctx.message.channel
 
         if not channel.permissions_for(server.me).manage_roles:
             await self.bot.say('I don\'t have manage_roles.')
