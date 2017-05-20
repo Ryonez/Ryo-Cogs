@@ -32,7 +32,7 @@ class MassRoles:
         """
         if ctx.invoked_subcommand is None:
             await send_cmd_help(ctx)
-            return
+            return False
 
         server = ctx.message.server
         sender = ctx.message.author
