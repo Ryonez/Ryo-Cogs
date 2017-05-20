@@ -49,7 +49,7 @@ class MassRoles:
             addroles = self._get_users_with_role(server, roles[0])
             for user in addroles:
                 try:
-                    await self.bot.add_roles(user, role)
+                    await self.bot.add_roles(user, roles[0])
                 except (discord.Forbidden, discord.HTTPException):
                     continue
             await self.bot.say("Completed")
@@ -60,7 +60,7 @@ class MassRoles:
     @commands.command(no_pm=True, pass_context=True, name="massremoverole", aliases=["mrr"])
     @checks.mod_or_permissions(administrator=True)
     async def _mrr(self, ctx: commands.Context,
-                   roles: discord.Role):
+                   role: discord.Role):
         """Removes the traget role from any users who have it.
         """
 
@@ -81,7 +81,7 @@ class MassRoles:
 
         elif answer.content.lower().strip() == "yes":
             await self.bot.say("Yes")
-            removerole = self._get_users_with_role(server, roles[0])
+            removerole = self._get_users_with_role(server, role)
             for user in removerole:
                 try:
                     await self.bot.remove_roles(user, role)
