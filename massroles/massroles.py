@@ -49,7 +49,7 @@ class MassRoles:
             addroles = self._get_users_with_role(server, roles[0])
             for user in addroles:
                 try:
-                    await self.bot.add_roles(user, roles[0])
+                    await self.bot.add_roles(user, roles[1])
                 except (discord.Forbidden, discord.HTTPException):
                     continue
             await self.bot.say("Completed")
