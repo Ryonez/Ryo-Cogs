@@ -32,6 +32,7 @@ class MassRoles:
         """
         if ctx.invoked_subcommand is None:
             await send_cmd_help(ctx)
+            return
 
         server = ctx.message.server
         sender = ctx.message.author
@@ -69,6 +70,7 @@ class MassRoles:
         """
         if ctx.invoked_subcommand is None:
             await send_cmd_help(ctx)
+            return
 
         server = ctx.message.server
         sender = ctx.message.author
