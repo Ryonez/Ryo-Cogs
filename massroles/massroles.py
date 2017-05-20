@@ -23,9 +23,9 @@ class MassRoles:
                 roled.append(member)
         return roled
 
-    @commands.command(no_pm=True, pass_context=True, name="massrole")
+    @commands.command(no_pm=True, pass_context=True, name="massaddrole", aliases=["mar"])
     @checks.mod_or_permissions(administrator=True)
-    async def _mdm(self, ctx: commands.Context,
+    async def _mar(self, ctx: commands.Context,
                    *roles: discord.Role):
         """Start the massrole add by providing the role you want **ADDED**, then the role of the users you want it added to.
         """
@@ -33,29 +33,63 @@ class MassRoles:
         server = ctx.message.server
         sender = ctx.message.author
 
-        addrole = roles[0]
-        torole = roles[1]
+        if not channel.permissions_for(server.me).manage_roles:
+            await self.bot.say('I don\'t have manage_roles.')
+            return
 
-        await self.bot.say("Please tell me the role you wish to group add **TO**(In a mention form):")
+        await self.bot.say("Please confirm:\nThe target role is-->`" + roles[0].name + "`\nThe role being added is-->`" + roles[1].name + "`\nSay yes to continue, or no to escape.")
         answer = await self.bot.wait_for_message(timeout=15,
                                                  author=ctx.message.author)
 
         if answer is None:
             await self.bot.say("Timed Out")
 
-        addroles = self._get_users_with_role(server, role)
+        elif answer.content.lower().strip() == "yes":
+            await self.bot.say("Yes")
+            addroles = self._get_users_with_role(server, roles[0])
+            for user in addroles:
+                try:
+                    await self.bot.add_roles(user, role)
+                except (discord.Forbidden, discord.HTTPException):
+                    continue
+            await self.bot.say("Completed")
+        else:
+            await self.bot.say("No")
+            return
 
+    @commands.command(no_pm=True, pass_context=True, name="massremoverole", aliases=["mrr"])
+    @checks.mod_or_permissions(administrator=True)
+    async def _mrr(self, ctx: commands.Context,
+                   roles: discord.Role):
+        """Removes the traget role from any users who have it.
+        """
+
+        server = ctx.message.server
+        sender = ctx.message.author
 
         if not channel.permissions_for(server.me).manage_roles:
             await self.bot.say('I don\'t have manage_roles.')
             return
 
-        for user in addroles:
-            try:
-                await self.bot.send_message(user,
-                                            message.format(user, role, sender))
-            except (discord.Forbidden, discord.HTTPException):
-                continue
+        await self.bot.say("Please confirm:\nThe role being removed is-->`" + role.name + "`\nSay yes to continue, or no to escape.")
+        answer = await self.bot.wait_for_message(timeout=15,
+                                                 author=ctx.message.author)
+
+        if answer is None:
+            await self.bot.say("Timed Out")
+
+        elif answer.content.lower().strip() == "yes":
+            await self.bot.say("Yes")
+            removerole = self._get_users_with_role(server, roles[0])
+            for user in removerole:
+                try:
+                    await self.bot.remove_roles(user, role)
+                except (discord.Forbidden, discord.HTTPException):
+                    continue
+            await self.bot.say("Completed")
+        else:
+            await self.bot.say("No")
+            return
 
 
 def setup(bot: commands.Bot):
