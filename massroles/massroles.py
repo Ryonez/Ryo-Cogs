@@ -40,9 +40,9 @@ class MassRoles:
 
         if not channel.permissions_for(server.me).manage_roles:
             await self.bot.say('I don\'t have manage_roles.')
-            return
+            return False
 
-        await self.bot.say("Please confirm:\nThe target role is-->`" + roles[0].name + "`\nThe role being added is-->`" + roles[1].name + "`\nSay yes to continue, or no to escape.")
+        await self.bot.say("Please confirm:\nThe target role is-->`" + roles[0].name + "`\nThe role being added is-->`" + roles[1].name + "`\nSay yes to continue, or aything else to escape.")
         answer = await self.bot.wait_for_message(timeout=15,
                                                  author=ctx.message.author)
 
@@ -50,7 +50,6 @@ class MassRoles:
             await self.bot.say("Timed Out")
 
         elif answer.content.lower().strip() == "yes":
-            await self.bot.say("Yes")
             addroles = self._get_users_with_role(server, roles[0])
             for user in addroles:
                 try:
@@ -59,8 +58,8 @@ class MassRoles:
                     continue
             await self.bot.say("Completed")
         else:
-            await self.bot.say("No")
-            return
+            await self.bot.say("Cancelled")
+            return False
 
     @commands.command(no_pm=True, pass_context=True, name="massremoverole", aliases=["mrr"])
     @checks.mod_or_permissions(administrator=True)
@@ -70,7 +69,7 @@ class MassRoles:
         """
         if ctx.invoked_subcommand is None:
             await send_cmd_help(ctx)
-            return
+            return False
 
         server = ctx.message.server
         sender = ctx.message.author
@@ -78,9 +77,9 @@ class MassRoles:
 
         if not channel.permissions_for(server.me).manage_roles:
             await self.bot.say('I don\'t have manage_roles.')
-            return
+            return False
 
-        await self.bot.say("Please confirm:\nThe role being removed is-->`" + role.name + "`\nSay yes to continue, or no to escape.")
+        await self.bot.say("Please confirm:\nThe role being removed is-->`" + role.name + "`\nSay yes to continue, or anything else to escape.")
         answer = await self.bot.wait_for_message(timeout=15,
                                                  author=ctx.message.author)
 
@@ -97,8 +96,8 @@ class MassRoles:
                     continue
             await self.bot.say("Completed")
         else:
-            await self.bot.say("No")
-            return
+            await self.bot.say("Cancelled")
+            return False
 
 
 def setup(bot: commands.Bot):
