@@ -23,17 +23,5 @@ To install the cogs, Follow the given steps:
 >
 > Once the module has loaded up, type yes.
 
-
- FeatHub
-Projects
-Docs
-Pricing
- Ryonez
-Import a project
-Sign out
-Ryonez/ryo-cogs
- View on GitHub
-
-Cogs for Red-DiscordBot
-
+# Feature Requests
 [![Feature Requests](http://feathub.com/Ryonez/ryo-cogs?format=svg)](http://feathub.com/Ryonez/ryo-cogs)
