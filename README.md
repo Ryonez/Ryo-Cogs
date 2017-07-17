@@ -36,18 +36,4 @@ Ryonez/ryo-cogs
 
 Cogs for Red-DiscordBot
 
-Owner info If you want, you can make your feature requests visible on your project's GitHub page.
-
-All it takes is adding this snippet of Markdown somewhere in your README.md file.
-
 [![Feature Requests](http://feathub.com/Ryonez/ryo-cogs?format=svg)](http://feathub.com/Ryonez/ryo-cogs)
-0 open 0 closed  
-Sort 
- 
-
-Containing keywords
-Go
- Suggest a new feature
-Nothing to see here!
-Help us improve FeatHub · Twitter
-© FeatHub 2017
