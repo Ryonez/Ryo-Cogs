@@ -2,7 +2,7 @@
 Cogs for Red-DiscordBot
 
 # WARNING, NOT READY FOR USE
-
+This cog is heavily in development. 
 
 # Installation
 To install the cogs, Follow the given steps:
