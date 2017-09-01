@@ -1975,6 +1975,10 @@ class Servermerge:
                     memberlist[m.id]["inv"] = "dm"
                 except discord.Forbidden:
                     memberlist[m.id]["dm"] = "forbidden"
+                except discord.HTTPException:
+                    memberlist[m.id]["dm"] = "HTTPException"
+                except discord.NotFound:
+                    memberlist[m.id]["dm"] = "Destination not found."
                 if self.isexempt(m, subexemptrole):
                     dmmsg.remove_field(3)
             self.mservers[server.id]["members"][m.id] = memberlist[m.id]
@@ -2404,8 +2408,10 @@ class Servermerge:
                     memberlist[hostm.id]["dm"] = "forbidden"
                 except discord.HTTPException:
                     dmstat = "- DM Message returned: HTTPException\n\n"
+                    memberlist[m.id]["dm"] = "HTTPException"
                 except discord.NotFound:
                     dmstat = "- DM Message returned: Destination not found.\n\n"
+                    memberlist[m.id]["dm"] = "Destination not found."
         else:
             dmstat = "- DM Message for user remembered as Forbbiden. Dm was not not attempted this time.\n\n"
 
