@@ -1720,10 +1720,10 @@ class Servermerge:
         if check == 'passed':
 
             if stage5p is None:
-                await self._stage5p1_(ctx),
+                await self._stage5p1_(ctx)
+                server = ctx.message.server
+                statuschannel = discord.utils.get(server.channels, id=self.mservers[server.id].get("statuschannel"))
                 stage5p = self.mservers[server.id].get("stage5p")
-
-            statuschannel = discord.utils.get(server.channels, id=self.mservers[server.id].get("statuschannel"))
 
             if statuschannel is not None:
                 embedmsg.clear_fields()
@@ -1775,6 +1775,7 @@ class Servermerge:
         try:
             statuschannel = await self.bot.create_channel(server, 'servermerge', (server.default_role, everyone),
                                                           (server.me, mine))
+            await asyncio.sleep(5)
             await self.bot.move_channel(statuschannel, 0)
             self.mservers[server.id]["statuschannel"] = statuschannel.id
             self.mservers[server.id]["stage5p"] = "sublockdown"
