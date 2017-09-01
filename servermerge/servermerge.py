@@ -2470,10 +2470,11 @@ class Servermerge:
             for linkcount in linkedroles:
                 if linkedroles[linkcount]["subroleid"] == r.id:
                     hrole = discord.utils.get(server.roles, id=linkedroles[linkcount].get("hostroleid"))
-                    if server.me.top_role.position > hrole.position:
-                        srlist.append(hrole)
-                    else:
-                        frlist.append(hrole)
+                    if hrole is not None:
+                        if server.me.top_role.position > hrole.position:
+                            srlist.append(hrole)
+                        else:
+                            frlist.append(hrole)
         if len(srlist) != 0:
             try:
                 await self.bot.add_roles(hostm, *srlist)
