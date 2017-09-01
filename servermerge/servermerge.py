@@ -1283,8 +1283,8 @@ class Servermerge:
                     elif response.content == 'del':
                         manualtype = 'del'
                         while manualtype == 'del':
-                            hostmatch : None
-                            submatch : None
+                            hostmatch = None
+                            submatch = None
                             present = 'no'
                             embedmsg = discord.Embed(colour=discord.Colour(0x0090f0),
                                                      timestamp=datetime.datetime.today())
