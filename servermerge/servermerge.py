@@ -1992,7 +1992,7 @@ class Servermerge:
         #Genterate list of users who I was unable to contact
         membersave = self.mservers[server.id].get("members")
         for m in membersave:
-            if membersave[m].get("dm") == "forbidden":
+            if membersave[m].get("dm") is not None:
                 fdmmembers.append(discord.utils.get(subserver.members, id=m))
 
         if len(fdmmembers) != 0:
@@ -2012,7 +2012,7 @@ class Servermerge:
             for i, page in enumerate(result):
                 if i != 0 and i % 4 == 0:
                     await asyncio.sleep(int=1)
-                    await self.bot.send_message(destination=subserverinvchannel, content=page)
+                await self.bot.send_message(destination=subserverinvchannel, content=page)
 
         #Posts the DM in the invitechannel
         await self.bot.send_message(destination=subserverinvchannel, content = subserver.default_role.mention, embed=dmmsg)
@@ -2021,7 +2021,7 @@ class Servermerge:
         for m in fdmmembers:
             memberlist = defaultdict(lambda: member_info_template.copy(), self.mservers[server.id]["members"])
             memberlist[m.id]["inv"] = "mention"
-            self.mserver[server.id]["members"][m.id] = memberlist[m.id]
+            self.mservers[server.id]["members"][m.id] = memberlist[m.id]
             self.save
 
 
@@ -2426,7 +2426,7 @@ class Servermerge:
             try:
                 await self.bot.kick(submem)
                 msg = "+ Member has been removed from the subserver!\n\n" + msg
-                self.mservers[server.id]["memberprocessedcount"] += 1
+                self.mservers[server.id]["memberprocessedcount"] = self.mservers[server.id].get("memberprocessedcount") + 1
                 memberlist[hostm.id]["processed"] = True
                 self.mservers[server.id]["members"][hostm.id] = memberlist[hostm.id]
                 self.save()
