@@ -2087,7 +2087,7 @@ class Servermerge:
         #Process each shared member
         for i, m in enumerate(smembers):
             if i != 0 and i % 10 == 0:
-                embedmsg.set_field_at(2, name=":link: *Applying linked Roles*", value=str(i) + " out of " + str(len(smembers)) + " processed.")
+                embedmsg.set_field_at(2, name=":link: *Applying linked Roles*", value=str(i+1) + " out of " + str(len(smembers)) + " processed.")
                 await self.bot.delete_message(status)
                 status = await self.bot.send_message(destination=statuschannel,
                                                      embed=embedmsg)
@@ -2367,7 +2367,7 @@ class Servermerge:
 
         #Ignore Bots
         if hostm.bot is True:
-            await self.bot.send_message(content="The user \"{}\`{}`\" was skipped: *Bot account.*".format(hostm.name, hostm.id))
+            await self.bot.send_message(destination=statuschannel, content="The user \"{}\`{}`\" was skipped: *Bot account.*".format(hostm.name, hostm.id))
             return
 
         #Throw if they've already been processed
