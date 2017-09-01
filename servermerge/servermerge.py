@@ -1699,7 +1699,6 @@ class Servermerge:
                     await asyncio.sleep(delay)
                     return
                 elif response.content == 'yes':
-                    await self.bot.say("Succeed")
                     check = 'passed'
                 elif response.content == 'no':
                     embedmsg.clear_fields()
