@@ -119,16 +119,11 @@ class Servermerge:
             statuschannel = discord.utils.get(server.channels, id=self.mservers[server.id].get("statuschannel"))
             erole = discord.utils.get(subserver.roles,
                                               id=self.mservers[server.id].get("subexemptrole"))
-            erolename = ""
             smembers = 0
             emembers = 0
             pmembers = self.mservers[server.id].get("memberprocessedcount")
 
-            if erole is None:
-                erolename = "**Not set!**"
-            else:
-                erolename = erole.name
-
+            if statuschannel
 
             # Create a list of members currently in both servers.
             for m in server.members:
@@ -155,14 +150,27 @@ class Servermerge:
             embedmsg.add_field(name="<:res1issue_open:330419505589256192> Hostserver info:",
                                value="Name: {}\nServerID: `{}`\nNumber of roles: {}\nNumber of members: {}".format(server.name, server.id, str(len(server.roles)), str(len(server.members))),
                                inline=False)
-            embedmsg.add_field(name="<:res1issue_open:330419505589256192> Subserver info:",
-                               value="Name: {}\nServerID: `{}`\nNumber of roles: {}\nExemption Role: {}\nExemption Role ID: `{}`\nNumber of members: {}".format(
-                                   subserver.name, subserver.id, str(len(subserver.roles)), erolename, erole.id, str(len(subserver.members))),
-                               inline=False)
-            embedmsg.add_field(name="<:res1issue_open:330419505589256192> Misc info:",
-                               value="Status channel: {}\nNumber of currently shared members: {}\nNumber of exempt members: {}\nMembers processed so far: {}".format(
-                                   statuschannel.mention, str(smembers), str(emembers), str(pmembers)),
-                               inline=False)
+            if erole is None:
+                embedmsg.add_field(name="<:res1issue_open:330419505589256192> Subserver info:",
+                                   value="Name: {}\nServerID: `{}`\nNumber of roles: {}\nExemption Role: *Not set!*\nExemption Role ID: `Not set!`\nNumber of members: {}".format(
+                                       subserver.name, subserver.id, str(len(subserver.roles)),
+                                       str(len(subserver.members))),
+                                   inline=False)
+            else:
+                embedmsg.add_field(name="<:res1issue_open:330419505589256192> Subserver info:",
+                                   value="Name: {}\nServerID: `{}`\nNumber of roles: {}\nExemption Role: {}\nExemption Role ID: `{}`\nNumber of members: {}".format(
+                                       subserver.name, subserver.id, str(len(subserver.roles)), erole.name, erole.id, str(len(subserver.members))),
+                                   inline=False)
+            if statuschannel is None:
+                embedmsg.add_field(name="<:res1issue_open:330419505589256192> Misc info:",
+                                   value="Status channel: *Not set!*\nNumber of currently shared members: {}\nNumber of exempt members: {}\nMembers processed so far: {}".format(
+                                       str(smembers), str(emembers), str(pmembers)),
+                                   inline=False)
+            else:
+                embedmsg.add_field(name="<:res1issue_open:330419505589256192> Misc info:",
+                                   value="Status channel: {}\nNumber of currently shared members: {}\nNumber of exempt members: {}\nMembers processed so far: {}".format(
+                                       statuschannel.mention, str(smembers), str(emembers), str(pmembers)),
+                                   inline=False)
             await self.bot.say(embed=embedmsg)
             return
         else:
