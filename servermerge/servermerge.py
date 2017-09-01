@@ -1740,7 +1740,8 @@ class Servermerge:
                 if stage5p == 'sublockdown':
                     return
 
-            embedmsg.add_field(name="<:res1issue_open:330419505589256192> *Subserver Locked Down*")
+            embedmsg.add_field(name="<:res1issue_open:330419505589256192> *Subserver Locked Down*",
+                                    value="Messages cannot be sent and invites can not be made.")
             await self.bot.delete_message(status)
             status = await self.bot.send_message(destination=statuschannel, content=ctx.message.author.mention,
                                                  embed=embedmsg)
@@ -2295,6 +2296,7 @@ class Servermerge:
                     overwrite.send_messages = False
                 if c.type.name == 'voice':
                     overwrite.speak = False
+                overwrite.create_instant_invite = False
                 try:
                     await self.bot.edit_channel_permissions(c, o[0], overwrite)
                 except discord.Forbidden:
@@ -2320,6 +2322,7 @@ class Servermerge:
                         setattr(overwrite, "send_messages", soverride.get("send_messages"))
                     if c.type.name == 'voice':
                         setattr(overwrite, "speak", soverride.get("speak"))
+                    setattr(overwrite, "create_instant_invite", soverride.get("create_instant_invite"))
                     try:
                         await self.bot.edit_channel_permissions(c, o[0], overwrite)
                     except discord.Forbidden:
