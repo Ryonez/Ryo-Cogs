@@ -2093,7 +2093,7 @@ class Servermerge:
                                                      embed=embedmsg)
 
             error = await self._memberprocessor_(m)
-            await asyncio.sleep(int=2)
+            await asyncio.sleep(2)
 
             if error is 'critical':
                 await self.bot.send_message(destination=statuschannel,
