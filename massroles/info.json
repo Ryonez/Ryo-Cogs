@@ -1,7 +1,7 @@
 {
     "AUTHOR" : "Ryonez",
-    "NAME" : "antiraid",
-    "SHORT" : "antiraid tools.",
-    "DESCRIPTION" : "Collection of tools to fight against raids.",
-    "TAGS": ["antiraid", "member", "tools", "slowmode"]
+    "NAME" : "massroles",
+    "SHORT" : "massroles",
+    "DESCRIPTION" : "Lets you give a role to a group of people who have a tageted role, or the remove a role from everyone with it.",
+    "TAGS": ["massroles", "member", "administration"]
 }

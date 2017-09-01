@@ -80,7 +80,6 @@ class MassRoles:
             await self.bot.say("Timed Out")
 
         elif answer.content.lower().strip() == "yes":
-            await self.bot.say("Yes")
             removerole = self._get_users_with_role(server, role)
             for user in removerole:
                 try:
