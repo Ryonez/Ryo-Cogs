@@ -1117,8 +1117,8 @@ class Servermerge:
             elif response.content == 'manual':
                 manualmode = 'on'
                 while manualmode == 'on':
-                    manualtype : 'none'
-                    manualstage : 'off'
+                    manualtype = 'none'
+                    manualstage = 'off'
                     embedmsg = discord.Embed(colour=discord.Colour(0x0090f0),
                                              timestamp=datetime.datetime.today())
                     embedmsg.set_author(name="Stage 3 - Role Links",
@@ -1285,7 +1285,7 @@ class Servermerge:
                         while manualtype == 'del':
                             hostmatch : None
                             submatch : None
-                            present : 'no'
+                            present = 'no'
                             embedmsg = discord.Embed(colour=discord.Colour(0x0090f0),
                                                      timestamp=datetime.datetime.today())
                             embedmsg.set_author(name="Stage 3 - Role Links",
