@@ -131,7 +131,7 @@ class Servermerge:
                 eroleid = erole.id
 
             if statuschannel is None:
-                statuschannelmention = "*Not set!"
+                statuschannelmention = "*Not set!*"
             else:
                 statuschannelmention = statuschannel.mention
 
