@@ -1,0 +1,7 @@
+{
+    "AUTHOR" : "Ryonez",
+    "NAME" : "massroles",
+    "SHORT" : "massroles",
+    "DESCRIPTION" : "Lets you give a role to a group of people who have a tageted role, or the remove a role from everyone with it.",
+    "TAGS": ["massroles", "member", "administration"]
+}

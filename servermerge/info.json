@@ -1,0 +1,7 @@
+{
+    "AUTHOR" : "Ryonez",
+    "NAME" : "servermerge",
+    "SHORT" : "servermerge",
+    "DESCRIPTION" : "A cog designed to merge a sub server into a host server, For those wanting to combine servers. Can only be used if you own both servers.",
+    "TAGS": ["servermerge", "server", "tools", "automation"]
+}
