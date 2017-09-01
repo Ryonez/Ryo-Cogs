@@ -1755,7 +1755,7 @@ class Servermerge:
                 if stage5p == 'dmprocess':
                     return
 
-            embedmsg.add_field(name="<:res1issue_open:330419505589256192> *Direct Messages Sent*")
+            embedmsg.add_field(name="<:res1issue_open:330419505589256192> *Direct Messages Sent*", value = "Everyone has been notified.")
             await self.bot.delete_message(status)
             await self.bot.send_message(destination=statuschannel, content=ctx.message.author.mention,
                                                      embed=embedmsg)
@@ -1960,40 +1960,44 @@ class Servermerge:
             memberlist = defaultdict(lambda: member_info_template.copy(), self.mservers[server.id]["members"])
             if i != 0 and i % 25 == 0:
                 embedmsg.set_field_at(1, name=":cyclone: *Processing member dm's.*",
-                                      value=str(i) + " out of " + str(len(submembers)) + " messages attempted.")
+                                      value=str(i+1) + " out of " + str(len(submembers)) + " messages attempted.")
                 dmstatus = await self.bot.edit_message(dmstatus,
                                                        embed=embedmsg)
 
             if memberlist[m.id]["inv"] is None and memberlist[m.id]["dm"] != "forbidden":
-                if self.isexempt(m, subexemptrole):
-                    dmmsg.add_field(name="<:res1issue_open:330419505589256192> *Exempt Role Found*",
-                                       value="You are exempt from being kicked from the server as long as you have the role.")
-                try:
-                    await self.bot.send_message(destination=m, embed=dmmsg)
-                    memberlist[m.id]["lastdm"] = "Invite Msg"
-                    memberlist[m.id]["lastdm"] = "sent"
-                    memberlist[m.id]["inv"] = "dm"
-                except discord.Forbidden:
-                    memberlist[m.id]["dm"] = "forbidden"
-                except discord.HTTPException:
-                    memberlist[m.id]["dm"] = "HTTPException"
-                except discord.NotFound:
-                    memberlist[m.id]["dm"] = "Destination not found."
-                if self.isexempt(m, subexemptrole):
-                    dmmsg.remove_field(3)
+                if m.bot is True:
+                    memberlist[m.id]["inv"] = "Bot, ignored"
+                else:
+                    if self.isexempt(m, subexemptrole):
+                        dmmsg.add_field(name="<:res1issue_open:330419505589256192> *Exempt Role Found*",
+                                           value="You are exempt from being kicked from the server as long as you have the role.")
+                    try:
+                        await self.bot.send_message(destination=m, embed=dmmsg)
+                        memberlist[m.id]["lastdm"] = "Invite Msg"
+                        memberlist[m.id]["lastdm"] = "sent"
+                        memberlist[m.id]["inv"] = "dm"
+                    except discord.Forbidden:
+                        memberlist[m.id]["dm"] = "forbidden"
+                    except discord.HTTPException:
+                        memberlist[m.id]["dm"] = "HTTPException"
+                    except discord.NotFound:
+                        memberlist[m.id]["dm"] = "Destination not found."
+                    if self.isexempt(m, subexemptrole):
+                        dmmsg.remove_field(3)
             self.mservers[server.id]["members"][m.id] = memberlist[m.id]
             self.save()
 
         #Update the dmstat processing field for the last time.
         embedmsg.set_field_at(1,
                               name="<:res1issue_open:330419505589256192> *Member dm's Processed.*",
-                              value=str(i) + " out of " + str(len(submembers)) + " messages attempted.")
+                              value=str(i+1) + " out of " + str(len(submembers)) + " messages attempted.")
 
         #Genterate list of users who I was unable to contact
         membersave = self.mservers[server.id].get("members")
         for m in membersave:
-            if membersave[m].get("dm") is not None:
-                fdmmembers.append(discord.utils.get(subserver.members, id=m))
+            subm = discord.utils.get(subserver.members, id=m)
+            if membersave[m].get("dm") is not None and subm.bot is False:
+                fdmmembers.append(subm)
 
         if len(fdmmembers) != 0:
             embedmsg.add_field(name=":anger: *Forbidden DM's detected.*",
@@ -2025,7 +2029,7 @@ class Servermerge:
             self.save
 
 
-        embedmsg.add_field(name="<:res1issue_open:330419505589256192> Dm Segment Complete*",
+        embedmsg.add_field(name="<:res1issue_open:330419505589256192> Dm Segment Complete",
                            value="Toggling join watch. New members will be given their roles upon going.")
         await self.bot.edit_message(dmstatus,
                                                embed=embedmsg)
