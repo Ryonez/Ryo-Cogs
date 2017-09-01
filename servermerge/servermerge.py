@@ -264,8 +264,10 @@ class Servermerge:
                                  colour=discord.Colour(0xFF470F),
                                  timestamp=datetime.datetime.today())
 
+        await self.bot.say("Attempting to restore subserver perms(This can take a ***long*** time, do not run the command again until I give you a result).")
+
         # Make sure that the main setup has attempted to lock the subserver already
-        if self.mservers[server.id].get("subserverlockdown") != "partial":
+        if self.mservers[server.id].get("subserverlockdown") is None:
             return
 
         # Try to remove the lockdown the subserver
@@ -289,8 +291,7 @@ class Servermerge:
         else:
             self.mservers[server.id]["subserverlockdown"] = "full"
         self.save()
-        embedmsg.add_field(
-            name="<:res1issue_open:330419505589256192> *Subserverperms were restored sucessfully".format(server.owner.name))
+        embedmsg.add_field(name="<:res1issue_open:330419505589256192> Subserverperms were restored sucessfully", value = "The values changed by the merge have been reversed.")
         await self.bot.say(embed=embedmsg)
 
 
@@ -2284,13 +2285,13 @@ class Servermerge:
 
         for c in subserverchannels:
             for o in c.overwrites:
-                overwrite = c.overwrites_for(o)
+                overwrite = c.overwrites_for(o[0])
                 if c.type.name == 'text':
                     overwrite.send_messages = False
                 if c.type.name == 'voice':
                     overwrite.speak = False
                 try:
-                    await self.bot.edit_channel_permissions(c, o, overwrite)
+                    await self.bot.edit_channel_permissions(c, o[0], overwrite)
                 except discord.Forbidden:
                     fchannels.append(c)
         if len(fchannels) == 0:
@@ -2307,21 +2308,21 @@ class Servermerge:
 
         for c in subserverchannels:
             for o in c.overwrites:
-                soverride = self.mservers[server.id]["subserversavedchanneloverrides"][c.id][o.id].get("overrides")
-                overwrite = c.overwrites_for(o)
+                soverride = self.mservers[server.id]["subserversavedchanneloverrides"][c.id][o[0].id].get("overrides")
+                overwrite = c.overwrites_for(o[0])
                 if soverride is not None:
                     if c.type.name == 'text':
                         setattr(overwrite, "send_messages", soverride.get("send_messages"))
                     if c.type.name == 'voice':
                         setattr(overwrite, "speak", soverride.get("speak"))
                     try:
-                        await self.bot.edit_channel_permissions(c, o, overwrite)
+                        await self.bot.edit_channel_permissions(c, o[0], overwrite)
                     except discord.Forbidden:
                         fchannels.append(c)
         if len(fchannels) == 0:
-            return "forbidden", fchannels
-        else:
             return None, fchannels
+        else:
+            return "forbidden", fchannels
 
     async def _memberprocessor_(self, hostm):
         #Processes a members merge into the host server.
