@@ -1728,7 +1728,6 @@ class Servermerge:
                 embedmsg.clear_fields()
                 embedmsg.add_field(name="<:res1issue_open:330419505589256192> *Status Channel*",
                                    value="Created/Present")
-                await self.bot.delete_message(status)
                 status = await self.bot.send_message(destination=statuschannel, content=ctx.message.author.mention,
                                                      embed=embedmsg)
             #Process channel lockdown
