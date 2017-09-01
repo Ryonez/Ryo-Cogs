@@ -2109,6 +2109,8 @@ class Servermerge:
         embedmsg.set_thumbnail(url="https://i.imgur.com/9B8LMZV.png")
         embedmsg.add_field(name=":white_check_mark:  *All set up*",
                            value="The shared members between the servers has now been processed! You can sit back and relax now, I'll process everyone who joins from the subserver until told otherwise!\n\nRun `[prefix]mergehalt` to stop me! \n\nIf someone is silly and deletes the invite code I made, run `[prefix]regeninvite` and I'll post it in the channel you designated for the subserver. I will **not** dm members with the new invite.")
+        await self.bot.send_message(destination=statuschannel,
+                                    embed=embedmsg)
 
         #Finnish up
         self.mservers[server.id]["stage5p"] = "complete"
@@ -2368,7 +2370,7 @@ class Servermerge:
 
         #Ignore Bots
         if hostm.bot is True:
-            await self.bot.send_message(destination=statuschannel, content="The user \"{}\`{}`\" was skipped: *Bot account.*".format(hostm.name, hostm.id))
+            await self.bot.send_message(destination=statuschannel, content="The user \"{}\" `{}` was skipped: *Bot account.*".format(hostm.name, hostm.id))
             return
 
         #Throw if they've already been processed
@@ -2418,7 +2420,7 @@ class Servermerge:
                     dmstat = "- DM Message returned: Destination not found.\n\n"
                     memberlist[hostm.id]["dm"] = "Destination not found."
         else:
-            dmstat = "- DM Message for user remembered as Forbbiden. Dm was not not attempted this time.\n\n"
+            dmstat = "- DM Message for user remembered as Forbbiden. Dm was not attempted this time.\n\n"
 
         #Kick the user if they aren't exempt. If Forbidden is returned, stop the servermerge processor(This should never happen). When a member is processed and kick from the subserver, they are considered processed
         if self.isexempt(subm, subexemptrole):
