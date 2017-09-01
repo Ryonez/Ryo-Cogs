@@ -162,7 +162,7 @@ class Servermerge:
                                value="Name: {}\nServerID: `{}`\nNumber of roles: {}\nNumber of members: {}".format(server.name, server.id, str(len(server.roles)), str(len(server.members))),
                                inline=False)
             embedmsg.add_field(name="<:res1issue_open:330419505589256192> Subserver info:",
-                               value="Name: {}\nServerID: `{}`\nNumber of roles: {}\nExemption Role: \"{}\"`\nExemption Role ID: `{}`\nNumber of members: {}".format(
+                               value="Name: {}\nServerID: `{}`\nNumber of roles: {}\nExemption Role: \"{}\"\nExemption Role ID: `{}`\nNumber of members: {}".format(
                                    subserver.name, subserver.id, str(len(subserver.roles)), erolename, eroleid,
                                    str(len(subserver.members))),
                                    inline=False)
@@ -2375,7 +2375,7 @@ class Servermerge:
             return
 
         #Create Initial role msg
-        msg = "Roles applied to {} in \"{}\".\n\nMerge being processed: \"{}\" into \"{}\"\n\nRoles given:\n".format(hostm.name, server.name, subserver.name, server.name)
+        msg = "Roles applied to \"{}\" in \"{}\".\n\nMerge being processed: \"{}\" into \"{}\"\n\nRoles given:\n".format(hostm.name, server.name, subserver.name, server.name)
 
         #Check to see if I have perms
         if not statuschannel.permissions_for(server.me).manage_roles:
@@ -2412,10 +2412,10 @@ class Servermerge:
                     memberlist[hostm.id]["dm"] = "forbidden"
                 except discord.HTTPException:
                     dmstat = "- DM Message returned: HTTPException\n\n"
-                    memberlist[m.id]["dm"] = "HTTPException"
+                    memberlist[hostm.id]["dm"] = "HTTPException"
                 except discord.NotFound:
                     dmstat = "- DM Message returned: Destination not found.\n\n"
-                    memberlist[m.id]["dm"] = "Destination not found."
+                    memberlist[hostm.id]["dm"] = "Destination not found."
         else:
             dmstat = "- DM Message for user remembered as Forbbiden. Dm was not not attempted this time.\n\n"
 
