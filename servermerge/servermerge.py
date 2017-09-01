@@ -1150,8 +1150,8 @@ class Servermerge:
                             manualstage = 'host'
 
                             while manualstage == 'host':
-                                hostmatch : None
-                                submatch : None
+                                hostmatch = None
+                                submatch = None
                                 embedmsg = discord.Embed(colour=discord.Colour(0x0090f0),
                                                          timestamp=datetime.datetime.today())
                                 embedmsg.set_author(name="Stage 3 - Role Links",
