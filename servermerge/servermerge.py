@@ -1884,7 +1884,7 @@ class Servermerge:
         subexemptrole = discord.utils.get(subserver.roles,
                                                 id=self.mservers[server.id].get("subexemptrole"))
         submembers = [m for m in subserver.members]
-        fdmmembers = {}
+        fdmmembers = []
         invitemsg = self.mservers[server.id].get("invitemsg")
         invitecode = self.mservers[server.id].get("invitecode")
         hinvites = await self.bot.invites_from(server)
@@ -2043,7 +2043,7 @@ class Servermerge:
         subserverid = self.mservers[server.id].get("subserverid")
         subserver = discord.utils.get(self.bot.servers, id=subserverid)
         hostmembers = [m for m in server.members]
-        smembers = {}
+        smembers = []
 
         #Error Embed
         critmsg = discord.Embed(colour=discord.Colour(0xFF0000),
