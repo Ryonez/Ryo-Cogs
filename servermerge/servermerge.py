@@ -1960,7 +1960,7 @@ class Servermerge:
             memberlist = defaultdict(lambda: member_info_template.copy(), self.mservers[server.id]["members"])
             if i != 0 and i % 25 == 0:
                 embedmsg.set_field_at(1,
-                                      value=str(i) + " out of " + str(len(submembers)) + " messages attempted.)")
+                                      value=str(i) + " out of " + str(len(submembers)) + " messages attempted.")
                 dmstatus = await self.bot.edit_message(dmstatus,
                                                        embed=embedmsg)
 
@@ -1977,13 +1977,13 @@ class Servermerge:
                     memberlist[m.id]["dm"] = "forbidden"
                 if subexemptrole in m.roles:
                     dmmsg.remove_field(3)
-            self.mserver[server.id]["members"][m.id] = memberlist[m.id]
+            self.mservers[server.id]["members"][m.id] = memberlist[m.id]
             self.save
 
         #Update the dmstat processing field for the last time.
         embedmsg.set_field_at(1,
                               name="<:res1issue_open:330419505589256192> *Member dm's Processed.*",
-                              value=str(i) + " out of " + str(len(submembers)) + " messages attempted.)")
+                              value=str(i) + " out of " + str(len(submembers)) + " messages attempted.")
 
         #Genterate list of users who I was unable to contact
         membersave = self.mservers[server.id].get("members")
@@ -1993,7 +1993,7 @@ class Servermerge:
 
         if len(fdmmembers) != 0:
             embedmsg.add_field(name=":anger: *Forbidden DM's detected.*",
-                               value=str(len(fdmmembers)) + " messages were forbidden. I'll mention each user in the invite in the subsver before posting the dm there.)")
+                               value=str(len(fdmmembers)) + " messages were forbidden. I'll mention each user in the invite in the subsver before posting the dm there.")
             dmstatus = await self.bot.edit_message(dmstatus,
                                                    embed=embedmsg)
 
