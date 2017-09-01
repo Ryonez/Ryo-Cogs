@@ -1892,13 +1892,48 @@ class Servermerge:
 
         #Error Embed
         critmsg = discord.Embed(colour=discord.Colour(0xFF0000),
-                                 timestamp=datetime.datetime.today())
+                                timestamp=datetime.datetime.today())
         critmsg.set_author(name="Stage 5 - Final Setup",
-                            icon_url="http://i.imgur.com/T5L6Djq.png")
+                           icon_url="http://i.imgur.com/T5L6Djq.png")
         critmsg.set_thumbnail(url="https://i.imgur.com/zNU3Y9m.png")
         critmsg.add_field(name="<:res1error:330424101661442050> *Critical error encountered, halting merge*",
-                           value="Stage 5 is halted. To resume stage 5 once the problem has been corrected, please run:\n```[prefix]mergeresume```",
-                           inline=False)
+                          value="Stage 5 is halted. To resume stage 5 once the problem has been corrected, please run:\n```[prefix]mergeresume```",
+                          inline=False)
+
+        # Status Embed
+        embedmsg = discord.Embed(colour=discord.Colour(0xFF0000))
+        embedmsg.set_author(name="Stage 5 - Dm Progress",
+                            icon_url="http://i.imgur.com/T5L6Djq.png")
+
+        # Check for a valid saved invite, create one if not found. Throws crit error and halts on fail.
+        for i in hinvites:
+            if i.code == invitecode:
+                invite = i
+                embedmsg.add_field(
+                    name=":incoming_envelope: *Invite Found*".format(server.owner.name),
+                    value=invite.code,
+                    inline=False)
+                dmstatus = await self.bot.send_message(destination=statuschannel,
+                                                       embed=embedmsg)
+        if invite is None:
+            try:
+                invite = await self.bot.create_invite(server.default_channel, max_age=0)
+                self.mservers[server.id]["invitecode"] = invite.code
+                self.save()
+                embedmsg.add_field(
+                    name=":incoming_envelope: *Invite Recreated*".format(server.owner.name),
+                    value=invite.code,
+                    inline=False)
+                dmstatus = await self.bot.send_message(destination=statuschannel,
+                                                       embed=embedmsg)
+            except discord.Forbidden:
+                critmsg.add_field(name="<:res1error:330424101661442050> *Warning*",
+                                  value="```diff\n- I'm not allowed to make an invite for {}\n Please give the Administrator perm to my role to continue. This will eliminate any permission issues.```".format(
+                                      server.name),
+                                  inline=False)
+                await self.bot.send_message(destination=statuschannel,
+                                            embed=critmsg)
+                return
 
         # DM Embed
         dmmsg = discord.Embed(colour=discord.Colour(0x7f08e0))
@@ -1909,57 +1944,22 @@ class Servermerge:
                         value=invitemsg,
                         inline=False)
         dmmsg.add_field(name="<:res1MomijiSmile:330424102806355968> *Invite link to {}.*".format(server.name),
-                        value=invite,
+                        value=invite.url,
                         inline=False)
         dmmsg.add_field(name="<:res1Rachet:332453473884962816> *Info*",
                         value="When you join the \"{}\", any roles that {} has linked to ones in \"{}\" will be automatically given to you. Your new roles will be listed in a dm I'll send you after I assign them(I'll still add them even if I can't dm you). If you are already in the server, please wait and I'll apply your roles soon.\n\nWhile the server merge is running, new messages and invite creation will not be possible in \"{}\", and once you've been moved you'll be removed from \"{}\"(Kicked). Thank you for your patience".format(
                             server.name, server.owner.name, subserver.name, subserver.name, subserver.name),
                         inline=False)
 
-        #Status Embed
-        embedmsg = discord.Embed(colour=discord.Colour(0xFF0000))
-        embedmsg.set_author(name="Stage 5 - Dm Progress",
-                            icon_url="http://i.imgur.com/T5L6Djq.png")
-
-        #Check for a valid saved invite, create one if not found. Throws crit error and halts on fail.
-        for i in hinvites:
-            if i.code == invitecode:
-                invite = i
-                dmmsg.add_field(
-                    name=":incoming_envelope: *Invite Found*".format(server.owner.name),
-                    value=invite.code,
-                    inline=False)
-                dmstatus = await self.bot.send_message(destination=statuschannel,
-                                            embed=embedmsg)
-        if invite is None:
-            try:
-                invite = await self.bot.create_invite(server.default_channel, max_age = 0)
-                self.mservers[server.id]["invitecode"] = invite.code
-                self.save()
-                dmmsg.add_field(
-                    name=":incoming_envelope: *Invite Recreated*".format(server.owner.name),
-                    value=invite.code,
-                    inline=False)
-                dmstatus = await self.bot.send_message(destination=statuschannel,
-                                                       embed=embedmsg)
-            except discord.Forbidden:
-                critmsg.add_field(name="<:res1error:330424101661442050> *Warning*",
-                                   value="```diff\n- I'm not allowed to make an invite for {}\n Please give the Administrator perm to my role to continue. This will eliminate any permission issues.```".format(
-                                       server.name),
-                                   inline=False)
-                await self.bot.send_message(destination=statuschannel,
-                                            embed=critmsg)
-                return
-
         #Send dms to users, while creating a list of those I can't dm.
         embedmsg.add_field(name=":cyclone: *Processing member dm's.*",
-                           value="0 out of " + str(len(submembers)) + " messages attempted.)")
+                           value="0 out of " + str(len(submembers)) + " messages attempted.")
         dmstatus = await self.bot.edit_message(dmstatus,
                                                embed=embedmsg)
         for i, m in enumerate(submembers):
             memberlist = defaultdict(lambda: member_info_template.copy(), self.mservers[server.id]["members"])
             if i != 0 and i % 25 == 0:
-                embedmsg.set_field_at(1,
+                embedmsg.set_field_at(1, name=":cyclone: *Processing member dm's.*",
                                       value=str(i) + " out of " + str(len(submembers)) + " messages attempted.")
                 dmstatus = await self.bot.edit_message(dmstatus,
                                                        embed=embedmsg)
@@ -1975,10 +1975,10 @@ class Servermerge:
                     memberlist[m.id]["inv"] = "dm"
                 except discord.Forbidden:
                     memberlist[m.id]["dm"] = "forbidden"
-                if subexemptrole in m.roles:
+                if self.isexempt(m, subexemptrole):
                     dmmsg.remove_field(3)
             self.mservers[server.id]["members"][m.id] = memberlist[m.id]
-            self.save
+            self.save()
 
         #Update the dmstat processing field for the last time.
         embedmsg.set_field_at(1,
@@ -2079,7 +2079,7 @@ class Servermerge:
         #Process each shared member
         for i, m in enumerate(smembers):
             if i != 0 and i % 10 == 0:
-                embedmsg.set_field_at(2, value=str(i) + " out of " + str(len(smembers)) + " processed.")
+                embedmsg.set_field_at(2, name=":link: *Applying linked Roles*", value=str(i) + " out of " + str(len(smembers)) + " processed.")
                 await self.bot.delete_message(status)
                 status = await self.bot.send_message(destination=statuschannel,
                                                      embed=embedmsg)
@@ -2092,7 +2092,7 @@ class Servermerge:
                 return
 
         #Final message
-        embedmsg.set_field_at(2, value=str(len(smembers)) + " out of " + str(len(smembers)) + " processed.")
+        embedmsg.set_field_at(2, name=":link: *Applying linked Roles*", value=str(len(smembers)) + " out of " + str(len(smembers)) + " processed.")
         await self.bot.delete_message(status)
         await self.bot.send_message(destination=statuschannel,
                                              embed=embedmsg)
