@@ -123,6 +123,11 @@ class Servermerge:
             emembers = 0
             pmembers = self.mservers[server.id].get("memberprocessedcount")
 
+            if self.mservers[server.id].get("running"):
+                running = "running"
+            else:
+                running = "paused"
+
             if erole is None:
                 erolename = "*Not set!*"
                 eroleid = "`Not set!`"
@@ -152,6 +157,7 @@ class Servermerge:
             else:
                 embedmsg = discord.Embed(title="Information:\n\n",
                                          colour=discord.Colour(0xFF470F),
+                                         description="The servermerge on this server is currently *{}*.".format(running),
                                          timestamp=datetime.datetime.today())
 
 
@@ -2114,6 +2120,8 @@ class Servermerge:
 
         #Finnish up
         self.mservers[server.id]["stage5p"] = "complete"
+        self.mservers[server.id]["stage"] = "complete"
+        self.mservers[server.id]["status"] = "Running."
         self.save()
 
     async def _linklist_(self, linkedroles, server, subserver, author, channel):
