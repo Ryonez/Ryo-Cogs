@@ -119,9 +119,16 @@ class Servermerge:
             statuschannel = discord.utils.get(server.channels, id=self.mservers[server.id].get("statuschannel"))
             erole = discord.utils.get(subserver.roles,
                                               id=self.mservers[server.id].get("subexemptrole"))
+            erolename = ""
             smembers = 0
             emembers = 0
             pmembers = self.mservers[server.id].get("memberprocessedcount")
+
+            if erole is None:
+                erolename = "**Not set!**"
+            else:
+                erolename = erole.name
+
 
             # Create a list of members currently in both servers.
             for m in server.members:
@@ -150,7 +157,7 @@ class Servermerge:
                                inline=False)
             embedmsg.add_field(name="<:res1issue_open:330419505589256192> Subserver info:",
                                value="Name: {}\nServerID: `{}`\nNumber of roles: {}\nExemption Role: {}\nExemption Role ID: `{}`\nNumber of members: {}".format(
-                                   subserver.name, subserver.id, str(len(subserver.roles)), erole.name, erole.id, str(len(subserver.members))),
+                                   subserver.name, subserver.id, str(len(subserver.roles)), erolename, erole.id, str(len(subserver.members))),
                                inline=False)
             embedmsg.add_field(name="<:res1issue_open:330419505589256192> Misc info:",
                                value="Status channel: {}\nNumber of currently shared members: {}\nNumber of exempt members: {}\nMembers processed so far: {}".format(
@@ -1638,13 +1645,6 @@ class Servermerge:
         statuschannel = discord.utils.get(server.channels, id=self.mservers[server.id].get("statuschannel"))
         initialmsg = None
         errormsg = None
-
-        #Stage 5 block
-        await self.bot.say(content="I'm not ready yet, bad boy {}".format(author.name))
-        return
-
-        #Embed core
-
 
         #Timeput message
         toutmsg = discord.Embed(colour=discord.Colour(0xFF0000))
