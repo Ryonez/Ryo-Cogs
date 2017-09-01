@@ -1769,7 +1769,7 @@ class Servermerge:
         embedmsg.set_author(name="Stage 5 - Final Setup",
                             icon_url="http://i.imgur.com/T5L6Djq.png")
 
-        everyone = discord.PermissionOverwrite(read_messages=None)
+        everyone = discord.PermissionOverwrite(read_messages=False)
         mine = discord.PermissionOverwrite(read_messages=True)
         try:
             statuschannel = await self.bot.create_channel(server, 'servermerge', (server.default_role, everyone),
