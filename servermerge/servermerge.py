@@ -149,15 +149,16 @@ class Servermerge:
                     if self.isexempt(subm, erole):
                         emembers += 1
 
-            if stage != "completed":
+            if stage == "completed":
                 embedmsg = discord.Embed(title="Information:\n\n",
-                                     colour=discord.Colour(0xFF470F),
-                                     description="This server is currently on `{}` of setup".format(stage),
-                                     timestamp=datetime.datetime.today())
+                                         colour=discord.Colour(0xFF470F),
+                                         description="The servermerge on this server is currently *{}*.".format(
+                                             running),
+                                         timestamp=datetime.datetime.today())
             else:
                 embedmsg = discord.Embed(title="Information:\n\n",
                                          colour=discord.Colour(0xFF470F),
-                                         description="The servermerge on this server is currently *{}*.".format(running),
+                                         description="This server is currently on `{}` of setup".format(stage),
                                          timestamp=datetime.datetime.today())
 
 
