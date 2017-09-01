@@ -1721,8 +1721,9 @@ class Servermerge:
 
             if stage5p is None:
                 await self._stage5p1_(ctx),
-                statuschannel = discord.utils.get(server.channels, id=self.mservers[server.id].get("statuschannel"))
                 stage5p = self.mservers[server.id].get("stage5p")
+
+            statuschannel = discord.utils.get(server.channels, id=self.mservers[server.id].get("statuschannel"))
 
             if statuschannel is not None:
                 embedmsg.clear_fields()
