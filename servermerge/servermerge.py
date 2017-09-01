@@ -2271,6 +2271,7 @@ class Servermerge:
                     self.mservers[server.id]["subserversavedchanneloverrides"][c.id] = current_overrides
             except discord.Forbidden:
                 return "forbidden", c
+        return None, None
 
     async def _subserverlockdown_(self, server):
         #Saves the channel overrides in the subserver.
