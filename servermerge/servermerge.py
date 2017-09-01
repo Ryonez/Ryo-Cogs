@@ -1906,7 +1906,7 @@ class Servermerge:
                          icon_url="http://i.imgur.com/T5L6Djq.png")
         dmmsg.set_thumbnail(url=subserver.icon_url)
         dmmsg.add_field(name=":incoming_envelope: *Message from the server owner, {}:*".format(server.owner.name),
-                        value=invitemsg.content,
+                        value=invitemsg,
                         inline=False)
         dmmsg.add_field(name="<:res1MomijiSmile:330424102806355968> *Invite link to {}.*".format(server.name),
                         value=invite,
