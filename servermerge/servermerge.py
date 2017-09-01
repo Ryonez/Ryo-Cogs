@@ -2087,12 +2087,13 @@ class Servermerge:
         #Process each shared member
         for i, m in enumerate(smembers):
             if i != 0 and i % 10 == 0:
-                embedmsg.set_field_at(2, name=":link: *Applying linked Roles*", value=str(i+1) + " out of " + str(len(smembers)) + " processed.")
+                embedmsg.set_field_at(1, name=":link: *Applying linked Roles*", value=str(i+1) + " out of " + str(len(smembers)) + " processed.")
                 await self.bot.delete_message(status)
                 status = await self.bot.send_message(destination=statuschannel,
                                                      embed=embedmsg)
 
             error = await self._memberprocessor_(m)
+            await asyncio.sleep(int=2)
 
             if error is 'critical':
                 await self.bot.send_message(destination=statuschannel,
@@ -2100,7 +2101,7 @@ class Servermerge:
                 return
 
         #Final message
-        embedmsg.set_field_at(2, name=":link: *Applying linked Roles*", value=str(len(smembers)) + " out of " + str(len(smembers)) + " processed.")
+        embedmsg.set_field_at(1, name=":link: *Applying linked Roles*", value=str(len(smembers)) + " out of " + str(len(smembers)) + " processed.")
         await self.bot.delete_message(status)
         await self.bot.send_message(destination=statuschannel,
                                              embed=embedmsg)
