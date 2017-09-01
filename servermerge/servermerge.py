@@ -2271,6 +2271,7 @@ class Servermerge:
                     self.mservers[server.id]["subserversavedchanneloverrides"][c.id] = current_overrides
             except discord.Forbidden:
                 return "forbidden", c
+        return None, None
 
     async def _subserverlockdown_(self, server):
         #Saves the channel overrides in the subserver.
@@ -2292,6 +2293,8 @@ class Servermerge:
                     fchannels.append(c)
         if len(fchannels) == 0:
             return "forbidden", fchannels
+        else:
+            return None, fchannels
 
     async def _removesubserverlockdown_(self, server):
         #Restores the channel overrides in the subserver that the merge made in the lockdown.
@@ -2315,6 +2318,8 @@ class Servermerge:
                         fchannels.append(c)
         if len(fchannels) == 0:
             return "forbidden", fchannels
+        else:
+            return None, fchannels
 
     async def _memberprocessor_(self, hostm):
         #Processes a members merge into the host server.
