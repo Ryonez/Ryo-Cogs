@@ -1731,16 +1731,20 @@ class Servermerge:
                                    value="Created/Present")
                 status = await self.bot.send_message(destination=statuschannel, content=ctx.message.author.mention,
                                                      embed=embedmsg)
+            await asyncio.sleep(2)
+
             #Process channel lockdown
             if stage5p == 'sublockdown':
                 await self._stage5p2_(ctx, statuschannel)
                 stage5p = self.mservers[server.id].get("stage5p")
                 if stage5p == 'sublockdown':
                     return
+
             embedmsg.add_field(name="<:res1issue_open:330419505589256192> *Subserver Locked Down*")
             await self.bot.delete_message(status)
             status = await self.bot.send_message(destination=statuschannel, content=ctx.message.author.mention,
                                                  embed=embedmsg)
+            await asyncio.sleep(2)
 
 
             #Merge dm sent out. First member list saved, join watch started.
@@ -1749,10 +1753,12 @@ class Servermerge:
                 stage5p = self.mservers[server.id].get("stage5p")
                 if stage5p == 'dmprocess':
                     return
-                embedmsg.add_field(name="<:res1issue_open:330419505589256192> *Direct Messages Sent*")
-                await self.bot.delete_message(status)
-                await self.bot.send_message(destination=statuschannel, content=ctx.message.author.mention,
+
+            embedmsg.add_field(name="<:res1issue_open:330419505589256192> *Direct Messages Sent*")
+            await self.bot.delete_message(status)
+            await self.bot.send_message(destination=statuschannel, content=ctx.message.author.mention,
                                                      embed=embedmsg)
+            await asyncio.sleep(2)
 
             #Process member in bot servers.
             if stage5p == 'mprocess':
@@ -2294,9 +2300,9 @@ class Servermerge:
                 except discord.Forbidden:
                     fchannels.append(c)
         if len(fchannels) == 0:
-            return "forbidden", fchannels
-        else:
             return None, fchannels
+        else:
+            return "forbidden", fchannels
 
     async def _removesubserverlockdown_(self, server):
         #Restores the channel overrides in the subserver that the merge made in the lockdown.
