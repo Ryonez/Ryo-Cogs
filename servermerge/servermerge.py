@@ -149,7 +149,7 @@ class Servermerge:
                     if self.isexempt(subm, erole):
                         emembers += 1
 
-            if stage == "completed":
+            if stage == "complete":
                 embedmsg = discord.Embed(title="Information:\n\n",
                                          colour=discord.Colour(0xFF470F),
                                          description="The servermerge on this server is currently *{}*.".format(
