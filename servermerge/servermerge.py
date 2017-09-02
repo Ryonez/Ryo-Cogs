@@ -68,7 +68,7 @@ class Servermerge:
         }
 
     @commands.group(pass_context=True, no_pm=True)
-    @checks.admin_or_permissions(Administrator=True)
+    @checks.admin_or_permissions(administrator=True)
     async def servermerge(self, ctx):
         """Servermerge."""
         if ctx.invoked_subcommand is None:

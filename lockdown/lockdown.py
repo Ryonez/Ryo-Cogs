@@ -28,7 +28,7 @@ class Lockdown:
         self.locks = defaultdict(lambda: server_template.copy(), locks)
 
     @commands.group(pass_context=True, no_pm=True)
-    @checks.admin_or_permissions(Administrator=True)
+    @checks.admin_or_permissions(administrator=True)
     async def lockdown(self, ctx):
         """lockdown."""
         if ctx.invoked_subcommand is None:
@@ -36,7 +36,7 @@ class Lockdown:
 
 
     @lockdown.command(name="channel", pass_context=True, no_pm=True)
-    @checks.admin_or_permissions(Administrator=True)
+    @checks.admin_or_permissions(administrator=True)
     async def _lockdownchannel_(self, ctx, channel: discord.Channel):
         """Locks the channel so only users with the Administrator perm can talk."""
         if channel is None:
@@ -70,7 +70,7 @@ class Lockdown:
             await self.bot.say(embed = unlockedmsg)
 
     @lockdown.command(name="server", pass_context=True, no_pm=True)
-    @checks.admin_or_permissions(Administrator=True)
+    @checks.admin_or_permissions(administrator=True)
     async def _lockdownserver_(self, ctx):
         """Locks the entire server so only users with the Administrator perm can talk."""
         server = ctx.message.server
