@@ -1,0 +1,7 @@
+{
+    "AUTHOR" : "Ryonez",
+    "NAME" : "lockdown",
+    "SHORT" : "lockdown",
+    "DESCRIPTION" : "Lockdown lets you set channel overides to stop anyone speaking on text or voice channels, and even lockdown the entire server. Only Administrators can speak while a lockdown is in effect.",
+    "TAGS": ["lockdown", "server", "tools", "crowd control"]
+}

@@ -2387,7 +2387,7 @@ class Servermerge:
             return
 
         #Create Initial role msg
-        msg = "Roles applied to \"{}\" in \"{}\".\n\nMerge being processed: \"{}\" into \"{}\"\n\nRoles given:\n".format(hostm.name, server.name, subserver.name, server.name)
+        msg = "Roles applied to \"{}\"(ID:{}) in \"{}\".\n\nMerge being processed: \"{}\" into \"{}\"\n\nRoles given:\n".format(hostm.name, hostm.id, server.name, subserver.name, server.name)
 
         #Check to see if I have perms
         if not statuschannel.permissions_for(server.me).manage_roles:
