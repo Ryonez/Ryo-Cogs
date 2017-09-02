@@ -78,8 +78,9 @@ class Lockdown:
         if self.locks[server.id].get("serverlockdown") is False:
             status = await self.bot.say("**Server Lockdown** initiating, one moment!")
             for c in server.channels:
-                await self._savechanneloverrides_(c)
-                await self._lockchannel_(c)
+                if self.locks[server.id]["channels"].get(c.id) is None:
+                    await self._savechanneloverrides_(c)
+                    await self._lockchannel_(c)
             self.locks[server.id]["serverlockdown"] = True
             self.save()
             lockedmsg = discord.Embed(colour=discord.Colour(0xFF0000),
