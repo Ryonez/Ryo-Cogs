@@ -2401,6 +2401,8 @@ class Servermerge:
         error, srlist, frlist = await self._applylinkedroles_(hostm, server, subserver)
 
         #Process Roles applied.
+        if len(srlist) == 0 and len(frlist) == 0:
+            msg += "--- No linked roles were detected for this user.\n"
         if len(srlist) != 0:
             for r in srlist:
                 msg += "+ \"{}\" | Success!\n".format(r.name)
