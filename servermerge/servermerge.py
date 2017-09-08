@@ -74,7 +74,7 @@ class Servermerge:
             await send_cmd_help(ctx)
 
 
-    @commands.command(name="mergesetup", pass_context=True, no_pm=True)
+    @servermerge.command(name="mergesetup", pass_context=True, no_pm=True)
     @checks.serverowner()
     async def _mergesetup_(self, ctx: commands.Context, serverID):
         """This starts a server merge. START with this command. This is to be run from the server you wish to merge TO.\n- For security, This can only be run by the server owner, and you must give this command your server ID to start."""
@@ -83,7 +83,7 @@ class Servermerge:
         if ctx.message.server.id == serverID:
             await self._core_(ctx)
 
-    @commands.command(name="mergeresume", pass_context=True, no_pm=True)
+    @servermerge.command(name="mergeresume", pass_context=True, no_pm=True)
     @checks.serverowner()
     async def _mergeresume_(self, ctx: commands.Context):
         """Resumes a server merge. Run only from the host server"""
@@ -104,7 +104,7 @@ class Servermerge:
             #            embedmsg.set_footer(text="Made by " + ownername, icon_url=ownericon)
             await self.bot.say(embed=embedmsg)
 
-    @commands.command(name="mergestatus", pass_context=True, no_pm=True)
+    @servermerge.command(name="mergestatus", pass_context=True, no_pm=True)
     @checks.serverowner()
     async def _mergestatus_(self, ctx: commands.Context):
 
@@ -186,7 +186,7 @@ class Servermerge:
                                 icon_url="http://i.imgur.com/PUDZ1gT.png")
             await self.bot.say(embed=embedmsg)
 
-    @commands.command(name="rolelist", pass_context=True, no_pm=True)
+    @servermerge.command(name="rolelist", pass_context=True, no_pm=True)
     @checks.serverowner()
     async def rolelist(self, ctx):
         """List the roles in the server and their Id's."""
@@ -220,7 +220,7 @@ class Servermerge:
                         break
             await self.bot.say(box(page, lang="py"))
 
-    @commands.command(name="retrysublockdown", pass_context=True, no_pm=True)
+    @servermerge.command(name="retrysublockdown", pass_context=True, no_pm=True)
     @checks.serverowner()
     async def retrysublockdown(self, ctx):
         """Tries to lockdown all of the subserver's channels again. Will only work if the main setup's lockdown had issues.Old saved perm are overwritten.."""
@@ -259,7 +259,7 @@ class Servermerge:
             name="<:res1issue_open:330419505589256192> *Full Subserver Lockdown Successfull".format(server.owner.name))
         await self.bot.say(embed=embedmsg)
 
-    @commands.command(name="removesublockdown", pass_context=True, no_pm=True)
+    @servermerge.command(name="removesublockdown", pass_context=True, no_pm=True)
     @checks.serverowner()
     async def removesublockdown(self, ctx):
         """Restores the overrides changed by the servermerge on the subserver from saved settings in the current merge."""
@@ -300,7 +300,7 @@ class Servermerge:
         await self.bot.say(embed=embedmsg)
 
 
-    @commands.command(name="regeninvite", pass_context=True, no_pm=True)
+    @servermerge.command(name="regeninvite", pass_context=True, no_pm=True)
     @checks.serverowner()
     async def regeninvite(self, ctx):
         """Creates a new invite code an sends it to the Subserver's invite channel."""
@@ -339,7 +339,7 @@ class Servermerge:
                 await self.bot.say(embed=embedmsg)
                 return
 
-    @commands.command(name="mergepause", pass_context=True, no_pm=True)
+    @servermerge.command(name="mergepause", pass_context=True, no_pm=True)
     @checks.serverowner()
     async def mergepause(self, ctx, timeout: int = 30):
         """Pauses the current servermerge. Only work when the merge setup is complete."""
@@ -373,7 +373,7 @@ class Servermerge:
             self.bot.say("Unexpected response, canceling.")
 
 
-    @commands.command(name="mergedelete", pass_context=True, no_pm=True)
+    @servermerge.command(name="mergedelete", pass_context=True, no_pm=True)
     @checks.serverowner()
     async def mergedelete(self, ctx, timeout: int=30):
         """Complete closes the current servermerge, and deletes all settings."""
