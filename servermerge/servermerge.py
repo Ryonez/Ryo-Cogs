@@ -68,12 +68,10 @@ class Servermerge:
         }
 
     @commands.group(pass_context=True, no_pm=True)
-    @checks.admin_or_permissions(administrator=True)
     async def servermerge(self, ctx):
         """Servermerge."""
         if ctx.invoked_subcommand is None:
             await send_cmd_help(ctx)
-            return
 
 
     @commands.command(name="mergesetup", pass_context=True, no_pm=True)
@@ -182,7 +180,7 @@ class Servermerge:
         else:
             embedmsg = discord.Embed(title="Information:\n\n",
                                      colour=discord.Colour(0xFF470F),
-                                     description="This server is currently not being merged, nothing to display.",
+                                     description="This server is currently not being merged, nothing to display.\n\nPlease not, This must be run from the host server for now.",
                                      timestamp=datetime.datetime.today())
             embedmsg.set_author(name="Server Merge Status",
                                 icon_url="http://i.imgur.com/PUDZ1gT.png")
@@ -366,9 +364,9 @@ class Servermerge:
         if response is None:
             await self.bot.say("Timed out.")
         elif response == "yes":
-            await self.bot.say("Merge has been paused!")
             self.mservers[server.id]["running"] = False
             self.save()
+            await self.bot.say("Merge has been paused!")
         elif response == "no":
             return
         else:
