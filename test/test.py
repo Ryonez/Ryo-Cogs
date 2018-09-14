@@ -1,6 +1,4 @@
 from discord.ext import commands
-from cogs.utils.dataIO import dataIO
-from __main__ import send_cmd_help, settings
 from .utils import checks
 import datetime
 import discord
@@ -33,4 +31,5 @@ class test:
 
 
 def setup(bot: commands.Bot):
-    bot.add_cog(test(bot))
+    n = test(bot)
+    bot.add_cog(n)

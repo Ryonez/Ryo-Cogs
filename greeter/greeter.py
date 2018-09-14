@@ -15,7 +15,7 @@ server_template = {
     "enabled" : False
 }
 
-class Greet:
+class Greeter:
 
     def __init__(self, bot):
         self.bot = bot
@@ -31,10 +31,10 @@ class Greet:
             await send_cmd_help(ctx)
             return
 
-        if self.settings[server.id].get("enabled"):
+        server = ctx.message.server
 
-            #Setup vars
-            server = ctx.message.server
+        if self.settings[server.id].get("enabled"):
+            
             mrole = discord.utils.get(server.roles, id=self.settings[server.id].get("mrolesid"))
 
             if ctx.message.author is self._isgreeter_(server, ctx.author):
@@ -60,7 +60,7 @@ class Greet:
                     return True
             return False
 
-    def _log_(self, status, timstamp, server, greetuser = None, newuser = None):
+    def _log_(self, status, timestamp, server, greetuser = None, newuser = None):
         # Loggint for the greeter cog.
         logch = discord.utils.get(server.channels, id=self.settings[server.id].get("greetlogchid"))
 
@@ -69,8 +69,8 @@ class Greet:
         if status != "Success":
             embedmsg = discord.Embed(title="{} greeted {} to the server\n\n",
                                          colour=discord.Colour(0x54d824),
-                                         # description="This server is currently on `{}` of setup".format(stage),
-                                         timestamp)
+                                         description="This server is currently on `{}` of setup".format("test"),
+                                         timestamp = timestamp)
 
     def save(self):
         setpath = os.path.join('data', 'greet', 'settings.json')
