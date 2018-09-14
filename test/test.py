@@ -20,14 +20,14 @@ class test:
 
         if ctx.invoked_subcommand is None:
 
-            timestamp = datetime.datetime.today()
+        timestamp = datetime.datetime.today()
 
-            embedmsg = discord.Embed(title="{} greeted {} to the server\n\n".format(ctx.author.name, ctx.author.name),
-                                            colour=discord.Colour(0x54d824),
-                                            # description="This server is currently on `{}` of setup".format(stage),
-                                            timestamp = timestamp)
+        embedmsg = discord.Embed(title="{} greeted {} to the server\n\n".format(ctx.author.name, ctx.author.name),
+                                        colour=discord.Colour(0x54d824),
+                                        # description="This server is currently on `{}` of setup".format(stage),
+                                        timestamp = timestamp)
 
-            await self.bot.say(embed=embedmsg)
+        await self.bot.say(embed=embedmsg)
 
 
 
