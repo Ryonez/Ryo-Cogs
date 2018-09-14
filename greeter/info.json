@@ -1,0 +1,7 @@
+{
+    "AUTHOR" : "Ryonez",
+    "NAME" : "greeter",
+    "SHORT" : "greeter",
+    "DESCRIPTION" : "A greeter system that allows those with a specifed greeter role to give others another specified role ",
+    "TAGS": ["greeter", "member", "administration"]
+}
