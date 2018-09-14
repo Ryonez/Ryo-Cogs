@@ -13,19 +13,21 @@ class test:
 
     @commands.command()
     @checks.is_owner()
-    async def emtest(self, ctx, test = test):
+    async def emtest(self, ctx):
         """Loads a cog
 
         Example: load mod"""
 
-        timestamp = datetime.datetime.today()
+        if ctx.invoked_subcommand is None:
 
-        embedmsg = discord.Embed(title="{} greeted {} to the server\n\n".format(ctx.author.name, ctx.author.name),
-                                         colour=discord.Colour(0x54d824),
-                                         # description="This server is currently on `{}` of setup".format(stage),
-                                         timestamp = timestamp)
+            timestamp = datetime.datetime.today()
 
-        await self.bot.say(embed=embedmsg)
+            embedmsg = discord.Embed(title="{} greeted {} to the server\n\n".format(ctx.author.name, ctx.author.name),
+                                            colour=discord.Colour(0x54d824),
+                                            # description="This server is currently on `{}` of setup".format(stage),
+                                            timestamp = timestamp)
+
+            await self.bot.say(embed=embedmsg)
 
 
 
