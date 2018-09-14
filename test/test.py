@@ -16,28 +16,30 @@ class test:
     async def emtest(self, ctx):
         """Test code"""
 
-        timestamp = datetime.datetime.today()
+        if ctx.invoked_subcommand is None:
+            timestamp = datetime.datetime.today()
 
-        embedmsg = discord.Embed(title="{} greeted {} to the server\n\n".format(ctx.message.author.mention, ctx.message.author.name),
-                                        colour=discord.Colour(0x54d824),
-                                        # description="This server is currently on `{}` of setup".format(stage),
-                                        timestamp = timestamp)
+            embedmsg = discord.Embed(title="{} greeted {} to the server\n\n".format(ctx.message.author.mention, ctx.message.author.name),
+                                            colour=discord.Colour(0x54d824),
+                                            # description="This server is currently on `{}` of setup".format(stage),
+                                            timestamp = timestamp)
 
-        await self.bot.say(embed=embedmsg)
+            await self.bot.say(embed=embedmsg)
 
     @commands.command()
     @checks.is_owner()
     async def emtest1(self, ctx):
         """Test code"""
 
-        timestamp = datetime.datetime.today()
+        if ctx.invoked_subcommand is None:
+            timestamp = datetime.datetime.today()
 
-        embedmsg = discord.Embed(title="{} greeted {} to the server\n\n".format(ctx.message.author.mention, ctx.message.author.name),
-                                        colour=discord.Colour(0x54d824),
-                                        description="{} was given the {} role".format(ctx.message.author.name, ctx.message.author.top_role),
-                                        timestamp = timestamp)
+            embedmsg = discord.Embed(title="{} greeted {} to the server\n\n".format(ctx.message.author.mention, ctx.message.author.name),
+                                            colour=discord.Colour(0x54d824),
+                                            description="{} was given the {} role".format(ctx.message.author.name, ctx.message.author.top_role),
+                                            timestamp = timestamp)
 
-        await self.bot.say(embed=embedmsg)
+            await self.bot.say(embed=embedmsg)
 
     @commands.command()
     @checks.is_owner()
