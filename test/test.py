@@ -34,7 +34,7 @@ class test:
 
         embedmsg = discord.Embed(title="{} greeted {} to the server\n\n".format(ctx.message.author.mention, ctx.message.author.name),
                                         colour=discord.Colour(0x54d824),
-                                        description="{} was given the {} role".format(ctx.message.author.name, ctx.message.author.top_role)
+                                        description="{} was given the {} role".format(ctx.message.author.name, ctx.message.author.top_role),
                                         timestamp = timestamp)
 
         await self.bot.say(embed=embedmsg)
