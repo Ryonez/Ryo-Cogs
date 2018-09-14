@@ -19,6 +19,7 @@ class test:
         Example: load mod"""
 
         if ctx.invoked_subcommand is None:
+            return
 
         timestamp = datetime.datetime.today()
 
