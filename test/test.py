@@ -13,7 +13,7 @@ class test:
 
     @commands.command()
     @checks.is_owner()
-    async def emtest(self, ctx):
+    async def emtest(self, ctx, test = test):
         """Loads a cog
 
         Example: load mod"""
