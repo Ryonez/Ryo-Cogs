@@ -23,7 +23,7 @@ class test:
                                         colour=discord.Colour(0x54d824),
                                         # description="This server is currently on `{}` of setup".format(stage),
                                         timestamp = timestamp)
-        embedmsg.add_footer(text = "{}'s (Greeter) ID: `{}` | {}'s (New member) ID `{}`".format(auth.name, auth.id, auth.mention, auth.id))
+        embedmsg.set_footer(text = "{}'s (Greeter) ID: `{}` | {}'s (New member) ID `{}`".format(auth.name, auth.id, auth.mention, auth.id))
 
         await self.bot.say(embed=embedmsg)
 
@@ -40,8 +40,8 @@ class test:
                                         description="{} was given the {} role".format(ctx.message.author.name, ctx.message.author.top_role),
                                         timestamp = timestamp)
         embedmsg.set_author(name="{} greeted {} to the server\n\n".format(ctx.message.author.mention, ctx.message.author.name,
-                            icon_url=auth.avatar_url)
-        embedmsg.add_footer(text = "{}'s (Greeter) ID: `{}` | {}'s (New member) ID `{}`".format(auth.name, auth.id, auth.mention, auth.id)
+                            icon_url=auth.avatar_url))
+        embedmsg.set_footer(text = "{}'s (Greeter) ID: `{}` | {}'s (New member) ID `{}`".format(auth.name, auth.id, auth.mention, auth.id))
 
         await self.bot.say(embed=embedmsg)
 
