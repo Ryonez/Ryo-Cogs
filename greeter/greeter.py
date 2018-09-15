@@ -73,7 +73,7 @@ class Greeter:
     @commands.group(pass_context=True, no_pm=True)
     @checks.admin_or_permissions(administrator=True)
     async def greetset(self, ctx):
-        """Settings for greeter. Having the greeter role, member role and log channel is required for greet to work fully."""
+        """Settings for greeter. Having the greeter role, member role and log channel set is required for greet to work fully."""
         if ctx.invoked_subcommand is None:
             await send_cmd_help(ctx)
 
