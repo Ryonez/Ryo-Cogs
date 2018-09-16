@@ -287,7 +287,7 @@ class Greeter:
 
             embed = discord.Embed()
             embed.colour = discord.Colour(0xEA2011)
-            embed.description = "I failed to give {} the {} role as requested by {}. Do I still have the mangage_roles perm, and is it under my highest role?\n\n {}'s ID: `{}`".format(newuser.mention, mrole.mention, greetuser.mention, newuser.name, newuser.id)
+            embed.description = "I failed to give {} the {} role as requested by {}. Do I still have the mangage_roles perm, and is the member role under my highest role?\n\n {}'s ID: `{}`".format(newuser.mention, mrole.mention, greetuser.mention, newuser.name, newuser.id)
             embed.timestamp = timestamp
             embed.set_thumbnail(url="https://i.imgur.com/zNU3Y9m.png")
             name = "{} attempted to welcome {}.".format(greetuser.name, newuser.name)
