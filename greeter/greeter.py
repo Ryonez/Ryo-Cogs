@@ -29,7 +29,7 @@ class Greeter:
     @commands.command(pass_context=True, no_pm=True)
     @checks.admin_or_permissions(administrator=True)
     async def greet(self, ctx, user: discord.User):
-        """The greeter command, pass a role to greet someone into the server."""
+        """The greeter command, pass a user to greet someone into the server."""
 
         server = ctx.message.server
         author = ctx.message.author
@@ -88,7 +88,7 @@ class Greeter:
         self.save()
         embed = discord.Embed()
         embed.colour = discord.Colour.green()
-        embed.description = "{} has been saved as the greeter role. Please note users with this role will be able to add the specified member role even if they don't have the perms to when greeter is enabled. Yo've been warned.".format(role.mention)
+        embed.description = "{} has been saved as the greeter role. Please note users with this role will be able to add the specified member role even if they don't have the perms to when greeter is enabled. You've been warned.".format(role.mention)
         name = "The greeter role was succesfully set."
         embed.set_author(name=name, icon_url="https://i.imgur.com/Kw0C9gK.png")
         await self.bot.say(embed = embed)
