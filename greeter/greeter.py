@@ -27,8 +27,8 @@ class Greeter:
         self.settings = defaultdict(lambda: server_template.copy(), settings)
 
     @commands.command(pass_context=True, no_pm=True)
-    async def greet(self, ctx, user: discord.User):
-        """The greeter command, pass a user to greet someone into the server."""
+    async def greet(self, ctx, user: discord.User, user2: discord.User = None):
+        """The greeter command, pass a user to greet someone into the server. If you pass a second user, the log show them as being related accounts.\ni.e `[p]greet @user1 @user2`"""
 
         server = ctx.message.server
         author = ctx.message.author
@@ -60,10 +60,14 @@ class Greeter:
                     await self.bot.delete_message(msg)
                 else:
                     try:
-                        await self.bot.add_roles(user, mrole)
-                        await self._greetlogger_("Success", timestamp, server, author, user, mrole)
+                        if user2 is None:
+                            await self.bot.add_roles(user, mrole)
+                            await self._greetlogger_("Success", timestamp, server, author, user, None, mrole)
+                        else:
+                            await self.bot.add_roles(user, mrole)
+                            await self._greetlogger_("Success - Linked", timestamp, server, author, user, user2, mrole)
                     except discord.Forbidden:
-                        await self._greetlogger_("Forbidden", timestamp, server, author, user, mrole)
+                        await self._greetlogger_("Forbidden", timestamp, server, author, user, None, mrole)
 
                 if clrcmd:
                     await asyncio.sleep(30)
@@ -261,7 +265,7 @@ class Greeter:
         return False
 
 
-    async def _greetlogger_(self, status, timestamp, server, greetuser = None, newuser = None, mrole = None):
+    async def _greetlogger_(self, status, timestamp, server, greetuser = None, newuser = None, linkuser = None, mrole = None):
         # Logging for the greeter cog.
         logch = discord.utils.get(server.channels, id=self.settings[server.id].get("greetlogchid"))
 
@@ -272,6 +276,27 @@ class Greeter:
             embed.description = "{} was given the {} role by {}\n\n {}'s ID: `{}`".format(newuser.mention, mrole.mention, greetuser.mention, newuser.name, newuser.id)
             embed.timestamp = timestamp
             name = "{} greeted {}".format(greetuser.name, newuser.name)
+            embed.set_author(name=name, icon_url="https://i.imgur.com/Kw0C9gK.png")
+            embed.set_thumbnail(url = newuser.avatar_url or discord.Embed.Empty)
+            embed.set_footer(text = "Greeter {}'s ID: `{}`".format(greetuser.name, greetuser.id))
+
+            try:
+                await self.bot.send_message(destination = logch, embed = embed)
+            except discord.Forbidden:
+                self.bot.logger.warning(
+                    "Did not have permission to send message to logging channel (server={}, channel={})".format(logch.server.id, logch.id)
+                )
+
+        elif status == "Success - Linked":
+
+            embed = discord.Embed()
+            embed.colour = discord.Colour.green()
+            embed.description = "{} was given the {} role by {}\n\n {}'s ID: `{}`".format(newuser.mention, mrole.mention, greetuser.mention, newuser.name, newuser.id)
+            embed.timestamp = timestamp
+            name = "{} greeted {}".format(greetuser.name, newuser.name)
+            embed.add_field(name="Linked Account:",
+                               value="This Member is related to: {}\n{}'s ID: `{}`".format(linkuser.mention, linkuser.name, linkuser.id),
+                               inline=False)
             embed.set_author(name=name, icon_url="https://i.imgur.com/Kw0C9gK.png")
             embed.set_thumbnail(url = newuser.avatar_url or discord.Embed.Empty)
             embed.set_footer(text = "Greeter {}'s ID: `{}`".format(greetuser.name, greetuser.id))
