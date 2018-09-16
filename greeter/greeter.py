@@ -28,7 +28,7 @@ class Greeter:
 
     @commands.command(pass_context=True, no_pm=True)
     async def greet(self, ctx, user: discord.User, user2: discord.User = None):
-        """The greeter command, pass a user to greet someone into the server. If you pass a second user, the log shows them as being related accounts.\ni.e `[p]greet @user1 @user2`"""
+        """The greeter command, pass a user to greet someone into the server. If you pass a second user, the log shows them as being related accounts.\ni.e `[p]greet @user1 @user2\nYou must has either the greeter role, or manage_roles perm to use this.`"""
 
         server = ctx.message.server
         author = ctx.message.author
@@ -43,7 +43,7 @@ class Greeter:
             if greetch is not None and ctx.message.channel is not greetch:
                 return
 
-            if self._hasrole_(author, grole):
+            if self._hasrole_(author, grole) or ctx.message.channel.permissions_for(author).manage_roles:
                 timestamp = ctx.message.timestamp
                 
                 if self._hasrole_(user, mrole):
