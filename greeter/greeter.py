@@ -28,7 +28,7 @@ class Greeter:
 
     @commands.command(pass_context=True, no_pm=True)
     async def greet(self, ctx, user: discord.User, user2: discord.User = None):
-        """The greeter command, pass a user to greet someone into the server. If you pass a second user, the log show them as being related accounts.\ni.e `[p]greet @user1 @user2`"""
+        """The greeter command, pass a user to greet someone into the server. If you pass a second user, the log shows them as being related accounts.\ni.e `[p]greet @user1 @user2`"""
 
         server = ctx.message.server
         author = ctx.message.author
