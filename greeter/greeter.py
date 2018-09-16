@@ -126,14 +126,15 @@ class Greeter:
         
         if clrcmd is True:
             clrcmd = False
-            embed.description = "Successfully triggered greet commands will be deleted."
-            embed.set_author(name="Greet command cleanup has been toggled on.", icon_url=onemoji)
-            embed.colour = discord.Colour.green()
-        else:
-            clrcmd = True
             embed.description = "Successfully triggered greet commands will not be deleted."
             embed.set_author(name="Greet command cleanup has been toggled off.", icon_url=offemoji)
             embed.colour = discord.Colour(0xEA2011)
+            
+        else:
+            clrcmd = True
+            embed.description = "Successfully triggered greet commands will be deleted."
+            embed.set_author(name="Greet command cleanup has been toggled on.", icon_url=onemoji)
+            embed.colour = discord.Colour.green()
 
         self.settings[server.id]["removetriggercmd"] = clrcmd
         self.save()
