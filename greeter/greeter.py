@@ -27,7 +27,6 @@ class Greeter:
         self.settings = defaultdict(lambda: server_template.copy(), settings)
 
     @commands.command(pass_context=True, no_pm=True)
-    @checks.admin_or_permissions(administrator=True)
     async def greet(self, ctx, user: discord.User):
         """The greeter command, pass a user to greet someone into the server."""
 
@@ -78,7 +77,7 @@ class Greeter:
             await send_cmd_help(ctx)
 
     @greetset.command(name="grole", pass_context=True, no_pm=True)
-    @checks.serverowner()
+    @checks.admin_or_permissions(administrator=True)
     async def _grole_(self, ctx, role: discord.Role):
         """Sets the greeter role for the server. You can either mention a role, or give me a role ID.\n [p]greetset mrole @user"""
 
@@ -95,7 +94,7 @@ class Greeter:
 
 
     @greetset.command(name="mrole", pass_context=True, no_pm=True)
-    @checks.serverowner()
+    @checks.admin_or_permissions(administrator=True)
     async def _mrole_(self, ctx, role: discord.Role):
         """Sets the member role for the server. You can either mention a role, or give me a role ID.\n [p]greetset mrole @user"""
 
@@ -111,7 +110,7 @@ class Greeter:
         await self.bot.say(embed = embed)
 
     @greetset.command(name="cleanupcmd", pass_context=True, no_pm=True)
-    @checks.serverowner()
+    @checks.admin_or_permissions(administrator=True)
     async def _cleanupcmd_(self, ctx):
         """Toggles weather the bot removes successfully triggered greet commands from greeters. Delays 30 seconds before doing so. \n [p]greetset cleanupcmd"""
 
@@ -142,7 +141,7 @@ class Greeter:
         await self.bot.say(embed = embed)
 
     @greetset.command(name="loggerchannel", pass_context=True, no_pm=True)
-    @checks.serverowner()
+    @checks.admin_or_permissions(administrator=True)
     async def _logggerchannel_(self, ctx, channel: discord.Channel = None):
         """Sets the channel greeter will log to. Mention a channel with this command, or use it's ID to set it.\ni.e: [p]greetset loggerchannel #greeter-logs\n"""
 
@@ -179,7 +178,7 @@ class Greeter:
             await self.bot.say(embed = embed)
 
     @greetset.command(name="greetchannel", pass_context=True, no_pm=True)
-    @checks.serverowner()
+    @checks.admin_or_permissions(administrator=True)
     async def _greetchannel_(self, ctx, channel: discord.Channel = None):
         """Sets the channel greeters have to greet from, a channel tha `[p]greet` is locked to. Mention a channel with this command, or use it's ID to set it.\ni.e: [p]greetset greetchannel #greeter-logs\nIf no channel is given, the command is unlocked for use anywhere on the server."""
 
@@ -226,7 +225,7 @@ class Greeter:
             await self.bot.say(embed = embed)
 
     @greetset.command(name="greeter", pass_context=True, no_pm=True)
-    @checks.serverowner()
+    @checks.admin_or_permissions(administrator=True)
     async def _greeter_(self, ctx, switch):
         """Enable or disable the greeter cog for the server.\n [p]greetset swtich [enabled/disable]"""
 
