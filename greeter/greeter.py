@@ -277,7 +277,7 @@ class Greeter:
             embed.timestamp = timestamp
             name = "{} greeted {}".format(greetuser.name, newuser.name)
             embed.set_author(name=name, icon_url="https://i.imgur.com/Kw0C9gK.png")
-            embed.set_thumbnail(url = newuser.avatar_url or discord.Embed.Empty)
+            embed.set_thumbnail(url = newuser.avatar_url or newuser.default_avatar_url)
             embed.set_footer(text = "Greeter {}'s ID: `{}`".format(greetuser.name, greetuser.id))
 
             try:
@@ -298,7 +298,7 @@ class Greeter:
                                value="This Member is related to: {}\n{}'s ID: `{}`".format(linkuser.mention, linkuser.name, linkuser.id),
                                inline=False)
             embed.set_author(name=name, icon_url="https://i.imgur.com/Kw0C9gK.png")
-            embed.set_thumbnail(url = newuser.avatar_url or discord.Embed.Empty)
+            embed.set_thumbnail(url = newuser.avatar_url or newuser.default_avatar_url)
             embed.set_footer(text = "Greeter {}'s ID: `{}`".format(greetuser.name, greetuser.id))
 
             try:
